@@ -1,2 +1,3 @@
 # ros2-workspace-template
- ROS2 workspace using VSCode Remote Container with Docker Compose
+
+Template for ROS2 ([Humble Hawksbill](https://docs.ros.org/en/humble/)) workspace using [VSCode Remote Container](https://code.visualstudio.com/docs/remote/containers) with [Docker Compose](https://docs.docker.com/compose/).
