@@ -1,0 +1,33 @@
+# syntax=docker/dockerfile:1
+
+# Reason for image correct as of 23 Jun 2022:
+#  - Latest 11.x version of CUDA (CUDA 11.x minor version compatibility guarantee)
+#  - Only CUDA Runtime & cuDNN needed for most AI training & inference frameworks
+#  - Latest distro supported by both ROS1 & ROS2 is Ubuntu Focal
+FROM nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu20.04 as base
+
+# UTF-8 included in nvidia's image but not activated. Needed for a lot of things.
+ENV LANG="C.UTF-8" LC_ALL="C.UTF-8"
+
+# Follow the rest of:
+# https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html
+
+# Consulting the official ROS Dockfile https://hub.docker.com/layers/ros/osrf/ros/humble-desktop-full/images/sha256-23a9fcba01a5dab28ca8601864a4e5f7df26087c431554e7a8bd9fcdcfd82d25?context=explore
+# might be useful
+
+# add user "user" following https://stackoverflow.com/questions/27701930/how-to-add-users-to-docker-container
+# for vscode & non-root access
+
+# also mount to /code rather than /workspace
+
+# https://code.visualstudio.com/docs/remote/containers:
+# browse through https://github.com/microsoft/vscode-dev-containers
+# for features to enable in devcontainer.json
+# i.e. https://github.com/microsoft/vscode-dev-containers/blob/main/script-library/docs/common.md
+# also write about it (since its useful for using dev-containers in the future)
+
+# continue copying from https://github.com/athackst/vscode_ros2_workspace
+
+# See https://github.com/ros2/variants/blob/master/desktop_full/package.xml
+# and browse https://index.ros.org/ to find out what was installed
+RUN apt update && apt install -y black
