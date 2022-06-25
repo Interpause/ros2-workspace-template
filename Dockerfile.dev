@@ -16,6 +16,8 @@ ENV LANG="C.UTF-8" LC_ALL="C.UTF-8"
 RUN apt update \
   && apt install -y sudo
 
+RUN apt install -y git
+
 # Follow the rest of:
 # https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html
 
@@ -23,10 +25,6 @@ RUN apt update \
 # Consulting the official ROS Dockfile https://hub.docker.com/layers/ros/osrf/ros/humble-desktop-full/images/sha256-23a9fcba01a5dab28ca8601864a4e5f7df26087c431554e7a8bd9fcdcfd82d25?context=explore
 # might be useful
 
-# add user "user" following https://stackoverflow.com/questions/27701930/how-to-add-users-to-docker-container
-# for vscode & non-root access
-
-# also mount to /code rather than /workspace
 
 # https://code.visualstudio.com/docs/remote/containers:
 # browse through https://github.com/microsoft/vscode-dev-containers
@@ -44,8 +42,9 @@ RUN apt update \
 ARG USERNAME=user
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-RUN groupadd --gid $USER_GID $USERNAME \
-  && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+ARG USER_SH=/bin/bash
+RUN groupadd -g $USER_GID $USERNAME \
+  && useradd -u $USER_UID -g $USER_GID -s $USER_SH -m $USERNAME \
   && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
   && chmod 0440 /etc/sudoers.d/$USERNAME
 
