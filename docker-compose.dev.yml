@@ -20,12 +20,17 @@ services:
       # Uncomment the next line to use Docker from inside the container
       # See https://aka.ms/vscode-remote/samples/docker-from-docker-compose for details
       - /var/run/docker.sock:/var/run/docker.sock
-      # (Linux only) Mount host's .Xauthority to allow container to self-authenticate with X Server
+      # (Linux only) (X Server) Mount host's .Xauthority to allow container to self-authenticate with X Server
       # - $HOME/.Xauthority:/home/user/.Xauthority:rw
 
-    # (Linux only) Use X Server address from host
+    # (Linux only) (X Server) Use X Server address from host
     # environment:
     #   DISPLAY: ${DISPLAY}
+
+    # Better process handling by actually have an process management system (tini)
+    init: true
+    # Larger shared memory for VNC & ROS2's DDS
+    shm_size: 1gb
 
     # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust
     cap_add:
@@ -44,6 +49,9 @@ services:
     command: /bin/sh -c "while sleep 1000; do :; done"
 
   # Extension of donor service defined in docker-compose.yml
-  # donor:
-  #   # (Linux only) Needed to use host's X Server for GUI apps
-  #   network_mode: host
+  donor:
+    # (Linux only) (X Server) Needed to use host's X Server for GUI apps
+    # network_mode: host
+    ports:
+      # expose noVNC installed by devcontainer.json features
+      - 6080:6080
