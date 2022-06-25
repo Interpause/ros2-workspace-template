@@ -1,5 +1,8 @@
 # syntax=docker/dockerfile:1
 
+# Dockerfile for development
+# Please create a separate Dockerfile with more precise dependencies for production.
+
 # Reason for image correct as of 23 Jun 2022:
 #  - Latest 11.x version of CUDA (CUDA 11.x minor version compatibility guarantee)
 #  - Only CUDA Runtime & cuDNN needed for most AI training & inference frameworks
@@ -9,8 +12,13 @@ FROM nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu20.04 as base
 # UTF-8 included in nvidia's image but not activated. Needed for a lot of things.
 ENV LANG="C.UTF-8" LC_ALL="C.UTF-8"
 
+# Install sudo for non-root user to use root (to install stuff).
+RUN apt update \
+  && apt install -y sudo
+
 # Follow the rest of:
 # https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html
+
 
 # Consulting the official ROS Dockfile https://hub.docker.com/layers/ros/osrf/ros/humble-desktop-full/images/sha256-23a9fcba01a5dab28ca8601864a4e5f7df26087c431554e7a8bd9fcdcfd82d25?context=explore
 # might be useful
@@ -30,4 +38,15 @@ ENV LANG="C.UTF-8" LC_ALL="C.UTF-8"
 
 # See https://github.com/ros2/variants/blob/master/desktop_full/package.xml
 # and browse https://index.ros.org/ to find out what was installed
-RUN apt update && apt install -y black
+# RUN apt update && apt install -y black
+
+# Create user & add to sudoers
+ARG USERNAME=user
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+RUN groupadd --gid $USER_GID $USERNAME \
+  && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+  && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+  && chmod 0440 /etc/sudoers.d/$USERNAME
+
+USER $USERNAME
