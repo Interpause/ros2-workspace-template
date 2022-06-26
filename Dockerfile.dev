@@ -31,16 +31,19 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/r
 
 # Opted for ROS2 Foxy as we are stuck on Ubuntu 20.04 till Nvidia updates their images
 # It has the latest EOL & better ecosystem support as Humble is still too new
-# See https://github.com/ros2/variants/blob/master/desktop/package.xml
-# and browse https://index.ros.org/ to find out what was installed
+ARG ROS_DISTRO=foxy 
+ENV ROS_DISTRO=$ROS_DISTRO
 
 # For sanity reasons, the ros-desktop download was broken up into a few steps (for example, connection error)
 # RUN apt-get update && apt-get upgrade -y
 RUN apt-get update
-RUN apt-get install -y ros-foxy-ros-base
-RUN apt-get install -y ~nros-foxy-rqt*
+RUN apt-get install -y ros-${ROS_DISTRO}-ros-base
+# ROS2 Qt comes with good debugging tools, is also framework for adding your own visualizations or control panel.
+RUN apt-get install -y ~nros-${ROS_DISTRO}-rqt*
 # One of the dependencies somehow breaks Xsession. So we won't use the entire suite.
 # Anyways, it is better for dependency management to consciously install things.
+# See https://github.com/ros2/variants/blob/master/desktop/package.xml
+# and browse https://index.ros.org/ to find out what was installed
 # RUN apt-get install -y ros-foxy-desktop
 
 # Install sudo for non-root user to use root (to install stuff).

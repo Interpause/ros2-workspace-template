@@ -8,3 +8,7 @@
 # Due to https://github.com/microsoft/vscode-remote-release/issues/6810#issuecomment-1159354677
 # this cannot be done in Dockerfile (else VSCode fails to configure git in the container)
 git config --global --add safe.directory /code
+
+# Ensure all dependencies are installed
+. /opt/ros/$ROS_DISTRO/setup.sh
+sudo rosdep install -i --from-path /code/src --rosdistro $ROS_DISTRO -y
