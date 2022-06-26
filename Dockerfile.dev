@@ -6,37 +6,48 @@
 # Reason for image correct as of 23 Jun 2022:
 #  - Latest 11.x version of CUDA (CUDA 11.x minor version compatibility guarantee)
 #  - Only CUDA Runtime & cuDNN needed for most AI training & inference frameworks
-#  - Latest distro supported by both ROS1 & ROS2 is Ubuntu Focal
-FROM nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu20.04 as base
+#  - There is not yet a Ubuntu 22.04 image with cudnn8
+#  - It is difficult to install CUDA in Docker properly so Nvidia's images must be used
+FROM nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu20.04
 
 # UTF-8 included in nvidia's image but not activated. Needed for a lot of things.
 ENV LANG="C.UTF-8" LC_ALL="C.UTF-8"
 
-# Install sudo for non-root user to use root (to install stuff).
-RUN apt update \
-  && apt install -y sudo
+# Below RUN statements are broken up to allow changing with minimal need for rebuilding
 
-RUN apt install -y git
+# Apparently needed in order to successfully add a repository
+RUN echo 'Etc/UTC' > /etc/timezone \
+  && ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
-# Follow the rest of:
-# https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html
+RUN apt-get update \
+  # Needed to curl then authorize ROS2 repository key
+  && apt-get install -y curl gnupg lsb-release software-properties-common \
+  # Enable universe repositories
+  && add-apt-repository universe
 
+# Curl key & authorize ros repository
+RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" > /etc/apt/sources.list.d/ros2.list
 
-# Consulting the official ROS Dockfile https://hub.docker.com/layers/ros/osrf/ros/humble-desktop-full/images/sha256-23a9fcba01a5dab28ca8601864a4e5f7df26087c431554e7a8bd9fcdcfd82d25?context=explore
-# might be useful
-
-
-# https://code.visualstudio.com/docs/remote/containers:
-# browse through https://github.com/microsoft/vscode-dev-containers
-# for features to enable in devcontainer.json
-# i.e. https://github.com/microsoft/vscode-dev-containers/blob/main/script-library/docs/common.md
-# also write about it (since its useful for using dev-containers in the future)
-
-# continue copying from https://github.com/athackst/vscode_ros2_workspace
-
-# See https://github.com/ros2/variants/blob/master/desktop_full/package.xml
+# Opted for ROS2 Foxy as we are stuck on Ubuntu 20.04 till Nvidia updates their images
+# It has the latest EOL & better ecosystem support as Humble is still too new
+# See https://github.com/ros2/variants/blob/master/desktop/package.xml
 # and browse https://index.ros.org/ to find out what was installed
-# RUN apt update && apt install -y black
+
+# For sanity reasons, the ros-desktop download was broken up into a few steps (for example, connection error)
+# RUN apt-get update && apt-get upgrade -y
+RUN apt-get update
+RUN apt-get install -y ros-foxy-ros-base
+RUN apt-get install -y ~nros-foxy-rqt*
+# One of the dependencies somehow breaks Xsession. So we won't use the entire suite.
+# Anyways, it is better for dependency management to consciously install things.
+# RUN apt-get install -y ros-foxy-desktop
+
+# Install sudo for non-root user to use root (to install stuff).
+RUN apt install -y sudo git
+
+# Use Python Black formatter
+RUN apt install -y black
 
 # Create user & add to sudoers
 ARG USERNAME=user

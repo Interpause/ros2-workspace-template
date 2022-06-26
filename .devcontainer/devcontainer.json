@@ -17,8 +17,8 @@
   // "runServices": [],
   // Uncomment the next line if you want to keep your containers running after VS Code shuts down.
   // "shutdownAction": "none",
-  "postCreateCommand": "/code/.devcontainer/hooks/postCreate.sh",
-  "postStartCommand": "/code/.devcontainer/hooks/postStart.sh",
+  "postCreateCommand": ". /code/.devcontainer/hooks/postCreate.sh",
+  "postStartCommand": ". /code/.devcontainer/hooks/postStart.sh",
   // Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "user",
   "features": {

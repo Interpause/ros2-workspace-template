@@ -1,6 +1,6 @@
 # ros2-workspace-template
 
-Template for ROS2 ([Humble Hawksbill](https://docs.ros.org/en/humble/)) workspace using [VSCode Remote Container](https://code.visualstudio.com/docs/remote/containers) with [Docker Compose](https://docs.docker.com/compose/). Go to <http://localhost:6080/> in order to view the development container's desktop (for GUI apps).
+Template for ROS2 workspace using [VSCode Remote Container](https://code.visualstudio.com/docs/remote/containers) with [Docker Compose](https://docs.docker.com/compose/). Go to <http://localhost:6080/> in order to view the development container's desktop (for GUI apps).
 
 ## Conventions
 
@@ -16,7 +16,7 @@ For development, ideally a single `Dockerfile.dev` that is comprehensive (i.e. h
 
 ## Using GUI Apps
 
-For ease of usage, the VNC approach is default over the X Server approach.
+For ease of usage, the VNC approach is default over the X Server approach. However, the X Server approach is more performant.
 
 ### Connecting to VNC
 
