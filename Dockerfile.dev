@@ -37,9 +37,14 @@ ENV ROS_DISTRO=$ROS_DISTRO
 # For sanity reasons, the ros-desktop download was broken up into a few steps (for example, connection error)
 # RUN apt-get update && apt-get upgrade -y
 RUN apt-get update
-RUN apt-get install -y ros-${ROS_DISTRO}-ros-base
+RUN apt-get install -y ros-${ROS_DISTRO}-ros-base python3-rosdep python3-colcon-common-extensions
+
+# Initialize rosdep
+RUN rosdep init && rosdep update
+
 # ROS2 Qt comes with good debugging tools, is also framework for adding your own visualizations or control panel.
 RUN apt-get install -y ~nros-${ROS_DISTRO}-rqt*
+
 # One of the dependencies somehow breaks Xsession. So we won't use the entire suite.
 # Anyways, it is better for dependency management to consciously install things.
 # See https://github.com/ros2/variants/blob/master/desktop/package.xml
@@ -47,10 +52,11 @@ RUN apt-get install -y ~nros-${ROS_DISTRO}-rqt*
 # RUN apt-get install -y ros-foxy-desktop
 
 # Install sudo for non-root user to use root (to install stuff).
-RUN apt install -y sudo git
+RUN apt-get install -y sudo git
 
 # Use Python Black formatter
-RUN apt install -y black
+RUN apt-get install -y black
+
 
 # Create user & add to sudoers
 ARG USERNAME=user
