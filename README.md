@@ -2,6 +2,10 @@
 
 Template for ROS2 workspace using [VSCode Remote Container](https://code.visualstudio.com/docs/remote/containers) with [Docker Compose](https://docs.docker.com/compose/). Go to <http://localhost:6080/> in order to view the development container's desktop (for GUI apps).
 
+## Testing
+
+Run `ros2 run pyratetest pub` and `ros2 run pyratetest sub` in two separate terminals. Use `rqt` (see GUI section [below](#using-gui-apps)) to reconfigure both nodes live (located under Plugins > Configuration > Dynamic Reconfigure).
+
 ## Conventions
 
 ### `Dockerfile` Naming
