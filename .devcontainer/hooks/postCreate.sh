@@ -5,5 +5,5 @@
 
 # Install rosdep & build current packages for development mode
 . /opt/ros/$ROS_DISTRO/setup.sh
-sudo rosdep install -i --from-path /code/src --rosdistro $ROS_DISTRO -y
+sudo rosdep install -i --from-path /code -y
 sudo colcon build --symlink-install

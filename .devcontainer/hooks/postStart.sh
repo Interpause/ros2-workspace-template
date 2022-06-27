@@ -11,4 +11,4 @@ git config --global --add safe.directory /code
 
 # Ensure all dependencies are installed
 . /opt/ros/$ROS_DISTRO/setup.sh
-sudo rosdep install -i --from-path /code/src --rosdistro $ROS_DISTRO -y
+sudo rosdep install -i --from-path /code -y
