@@ -1,2 +1,9 @@
 # You can partially generate this from .gitignore
 # A online converter: https://codesandbox.io/s/7e9ox7
+
+**/.devcontainer
+**/.vscode
+**/.git*
+build
+install
+log
