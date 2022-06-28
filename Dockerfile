@@ -32,6 +32,7 @@ RUN apt-get update && apt-get install -y \
   ros-${ROS_DISTRO}-ros-core \
   python3-rosdep \
   python3-colcon-common-extensions \
+  python3-pip \
   && rosdep init \
   && rosdep update \
   && . /opt/ros/$ROS_DISTRO/setup.sh \
@@ -39,6 +40,8 @@ RUN apt-get update && apt-get install -y \
   && colcon build \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf log/
+
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 10
 
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_setup.bash" >> ~/.bashrc
 CMD [ "bash" ]
