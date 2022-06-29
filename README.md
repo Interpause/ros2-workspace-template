@@ -65,7 +65,7 @@ On Windows, installing an X Server such as [VcXsrv](https://sourceforge.net/proj
 echo "export DISPLAY=host.docker.internal:0.0" >> ~/.bashrc
 ```
 
-If using a high-resolution display, ROS Qt might appear small, in which case adjusting `QT_SCALE_FACTOR` might help:
+If using a high-resolution display, `rqt` might appear small, in which case adjusting `QT_SCALE_FACTOR` might help:
 
 ```sh
 # postStart.sh
