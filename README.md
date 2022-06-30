@@ -6,6 +6,8 @@ Template for ROS2 workspace using [VSCode Remote Container](https://code.visuals
 
 Run `ros2 run pyratetest pub` and `ros2 run pyratetest sub` in two separate terminals. Use `rqt` (see GUI section [below](#using-gui-apps)) to reconfigure both nodes live (located under Plugins > Configuration > Dynamic Reconfigure).
 
+Alternatively, use the launch file via `ros2 run pyratetest test.launch.py`. Use `--show-args` to see how the launch options.
+
 ## Conventions
 
 ### `Dockerfile` Naming
