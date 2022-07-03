@@ -22,7 +22,7 @@ For development, ideally a single `Dockerfile.dev` that is comprehensive (i.e. h
 
 ## Using GUI Apps
 
-For ease of usage, the VNC approach is default over the X Server approach. However, the X Server approach is more performant.
+For ease of usage, the VNC approach is default over the X Server approach. ~However, the X Server approach is more performant.~ The X Server approach is only more performant on Linux, whereas on Windows, the VNC approach performs better. However, the X Server approach has a more native feel.
 
 ### Connecting to VNC
 
