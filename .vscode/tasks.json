@@ -3,6 +3,7 @@
   // for the documentation about the tasks.json format
   "version": "2.0.0",
   "tasks": [
+    // ROS extension is glitchy; separate tasks created for convenience
     {
       "label": "rosdep install dependencies",
       "type": "shell",
@@ -14,6 +15,20 @@
       "type": "shell",
       "command": "colcon build --symlink-install",
       "problemMatcher": []
+    },
+    {
+      "label": "colcon build specific",
+      "type": "shell",
+      "command": "colcon build --symlink-install --packages-select ${input:package}",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "package",
+      "description": "Package",
+      "default": "",
+      "type": "promptString"
     }
   ]
 }

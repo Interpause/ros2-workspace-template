@@ -1,11 +1,9 @@
 {
   "python.autoComplete.extraPaths": [
-    "/code",
     "/opt/ros/foxy/lib/python3.8/site-packages",
     "/opt/ros/foxy/local/lib/python3.8/dist-packages"
   ],
   "python.analysis.extraPaths": [
-    "/code",
     "/opt/ros/foxy/lib/python3.8/site-packages",
     "/opt/ros/foxy/local/lib/python3.8/dist-packages"
   ],

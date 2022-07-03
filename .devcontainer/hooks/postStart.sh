@@ -7,7 +7,7 @@
 # we have to add workspace folder as trusted by git
 # Due to https://github.com/microsoft/vscode-remote-release/issues/6810#issuecomment-1159354677
 # this cannot be done in Dockerfile (else VSCode fails to configure git in the container)
-git config --global --add safe.directory /code
+git config --global safe.directory "*"
 
 # Ensure all dependencies are installed
 . /opt/ros/$ROS_DISTRO/setup.sh
