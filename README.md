@@ -73,3 +73,9 @@ If using a high-resolution display, `rqt` might appear small, in which case adju
 # postStart.sh
 echo "export QT_SCALE_FACTOR=2" >> ~/.bashrc
 ```
+
+## Additional Tips
+
+### Adding New Submodules
+
+Adding new submodules might fail when within the container. In such a case, reopen locally to add the submodule before switching back to the container.
