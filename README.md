@@ -60,6 +60,41 @@ echo "export QT_SCALE_FACTOR=2" >> ~/.bashrc
 
 ## Additional Tips
 
-### Adding New Submodules
+### Update `rosdistro` Ocassionally
 
-Adding new submodules might fail when within the container. In such a case, reopen locally to add the submodule before switching back to the container.
+Run `sudo rosdep update` to update the package index.
+
+### When Things Break
+
+- `rosdep` has no version lock, see: <https://github.com/ros-infrastructure/rosdep/issues/325>.
+  - One solution would be to use your own install script instead of `rosdep`.
+- Delete both the `build` and `install` folder and rebuild everything.
+- While Python code is symlinked, the `launch` files aren't, meaning rebuilding the _specific_ package is needed when `launch` files are changed.
+
+### Docker Production Image
+
+#### Building
+
+```sh
+docker build . -t example/example:vx.x.x -t example/example:latest
+```
+
+#### Exporting
+
+```sh
+docker save example/example:latest -o example.tar.gz
+```
+
+#### Importing
+
+```sh
+docker load -i example.tar.gz
+```
+
+Restores the image tag used so it will still be tagged as `example/example:latest`.
+
+#### Running
+
+```sh
+docker run --rm --gpus all --network host example/example:latest
+```
