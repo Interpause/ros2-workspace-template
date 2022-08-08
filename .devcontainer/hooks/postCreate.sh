@@ -5,7 +5,7 @@
 
 # Uncomment & edit below if using named volume for repo
 # sudo chown user /code
-# git clone https://github.com/Interpause/ros2-workspace-template.git /code
+# git clone https://github.com/Interpause/ros2-workspace-template.git /code --recurse-submodules -j8
 
 # Install rosdep & build current packages for development mode
 . /opt/ros/$ROS_DISTRO/setup.sh
