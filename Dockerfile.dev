@@ -77,6 +77,24 @@ RUN groupadd -g $USER_GID $USERNAME \
   && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
   && chmod 0440 /etc/sudoers.d/$USERNAME
 
+# Add VNC for debugging
+COPY ./.devcontainer/scripts/desktop-lite-debian.sh /tmp/scripts/desktop-lite-debian.sh
+ENV DBUS_SESSION_BUS_ADDRESS="autolaunch:" \
+  VNC_RESOLUTION="1440x768x16" \
+  VNC_DPI="96" \
+  VNC_PORT="5901" \
+  NOVNC_PORT="6080" \
+  DISPLAY=":1"
+RUN bash /tmp/scripts/desktop-lite-debian.sh $USERNAME password
+
+COPY ./entrypoint.sh /entrypoint.sh
+ENTRYPOINT [ \
+  # VNC entrypoint
+  "/usr/local/share/desktop-init.sh", \
+  # ROS entrypoint
+  "/entrypoint.sh" \
+  ]
+
 USER $USERNAME
 
 # Auto-activate ROS whenever shell is opened

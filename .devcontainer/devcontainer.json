@@ -21,27 +21,20 @@
   "postStartCommand": ". /code/.devcontainer/hooks/postStart.sh",
   // Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "user",
-  "features": {
-    "desktop-lite": {
-      "password": "password",
-      "webPort": "6080",
-      "vncPort": "5901"
-    }
-  },
   "customizations": {
-		"vscode": {
-			"extensions": [
-				"njpwerner.autodocstring",
-				"bungcip.better-toml",
-				"VisualStudioExptTeam.vscodeintellicode",
-				"DavidAnson.vscode-markdownlint",
-				"esbenp.prettier-vscode",
-				"ms-python.vscode-pylance",
-				"ms-python.python",
-				"ms-azuretools.vscode-docker",
-				"ms-iot.vscode-ros",
-				"twxs.cmake"
-			]
-		}
-	}
+    "vscode": {
+      "extensions": [
+        "njpwerner.autodocstring",
+        "bungcip.better-toml",
+        "VisualStudioExptTeam.vscodeintellicode",
+        "DavidAnson.vscode-markdownlint",
+        "esbenp.prettier-vscode",
+        "ms-python.vscode-pylance",
+        "ms-python.python",
+        "ms-azuretools.vscode-docker",
+        "ms-iot.vscode-ros",
+        "twxs.cmake"
+      ]
+    }
+  }
 }

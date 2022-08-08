@@ -22,27 +22,11 @@ For development, ideally a single `Dockerfile.dev` that is comprehensive (i.e. h
 
 ## Using GUI Apps
 
-For ease of usage, the VNC approach is default over the X Server approach. ~However, the X Server approach is more performant.~ The X Server approach is only more performant on Linux, whereas on Windows, the VNC approach performs better. However, the X Server approach has a more native feel.
+For ease of usage, the VNC approach is default over the X Server approach. ~~However, the X Server approach is more performant.~~ The X Server approach is only more performant on Linux, whereas on Windows, the VNC approach performs better. However, the X Server approach has a more native feel.
 
 ### Connecting to VNC
 
-Using VSCode's [Remote Containers](https://code.visualstudio.com/docs/remote/containers) is necessary due to reliance on [Dev Container Features](https://code.visualstudio.com/docs/remote/containers#_dev-container-features-preview), specifically their [Desktop Install Script](https://github.com/microsoft/vscode-dev-containers/blob/main/script-library/docs/desktop-lite.md). The configuration can be found in [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json):
-
-```jsonc
-{
-  // ...
-  "features": {
-    "desktop-lite": {
-      "password": "password",
-      "webPort": "6080",
-      "vncPort": "5901"
-    }
-    // ...
-  }
-}
-```
-
-Afterwards, go to <http://localhost:6080/> to view the container's desktop, or use a VNC client of your choice.
+Go to <http://localhost:6080/> to view the container's desktop via the noVNC web client, or use a VNC client of your choice.
 
 ### Using Host's X Server
 

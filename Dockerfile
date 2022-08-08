@@ -41,7 +41,23 @@ RUN apt-get update && apt-get install -y \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf log/
 
+# Optionally add VNC for debugging
+# COPY ./.devcontainer/scripts/desktop-lite-debian.sh /tmp/scripts/desktop-lite-debian.sh
+# ENV DBUS_SESSION_BUS_ADDRESS="autolaunch:" \
+#   VNC_RESOLUTION="1440x768x16" \
+#   VNC_DPI="96" \
+#   VNC_PORT="5901" \
+#   NOVNC_PORT="6080" \
+#   DISPLAY=":1"
+# RUN bash /tmp/scripts/desktop-lite-debian.sh root password
+
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 10
 
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_setup.bash" >> ~/.bashrc
+ENTRYPOINT [ \
+  # VNC entrypoint
+  # "/usr/local/share/desktop-init.sh" \
+  # ROS entrypoint
+  "./entrypoint.sh" \
+  ]
 CMD [ "bash" ]

@@ -3,6 +3,7 @@
 
 # Config & Others
 **/.devcontainer
+!**/.devcontainer/scripts
 **/.vscode
 **/.git*
 **/docker-compose*
