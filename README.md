@@ -58,6 +58,10 @@ If using a high-resolution display, `rqt` might appear small, in which case adju
 echo "export QT_SCALE_FACTOR=2" >> ~/.bashrc
 ```
 
+## Additional Disk Performance on Windows
+
+Following <https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-a-named-volume-for-your-entire-source-tree>, it is possible to use a named volume to store the entire repository to improve disk performance on Windows. This resolves the longer ROS build times due to the inefficiencies of bind mounting. To use a named volume, there are instructions commented out in [`postCreate.sh`](.devcontainer/hooks/postCreate.sh#L6) and [`docker-compose.dev.yml`](docker-compose.dev.yml#L3-L22).
+
 ## Additional Tips
 
 ### Update `rosdistro` Ocassionally
