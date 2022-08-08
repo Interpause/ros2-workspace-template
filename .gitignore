@@ -3,7 +3,6 @@ COLCON_IGNORE
 build/*
 install/*
 log/*
-site/*
 
 # python
 __pycache__/
@@ -14,3 +13,6 @@ __pycache__/
 
 # profiling
 *.lprof
+
+# others
+# e.g. data/*

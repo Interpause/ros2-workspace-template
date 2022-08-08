@@ -1,16 +1,22 @@
 # You can partially generate this from .gitignore
 # A online converter: https://codesandbox.io/s/7e9ox7
 
+# Config & Others
 **/.devcontainer
 **/.vscode
 **/.git*
+**/docker-compose*
+**/Dockerfile*
+
+# ROS Build Artifacts
 build
 install
 log
 
+# Mount Points
+# e.g. data
+
+# Python Artifacts
 **/__pycache__
 **/*.py[cod]
 **/*.lprof
-
-**/docker-compose*
-**/Dockerfile*
