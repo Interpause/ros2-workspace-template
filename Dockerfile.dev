@@ -67,6 +67,10 @@ RUN apt-get install -y black
 # Install some common dependencies
 # RUN apt-get install -y python3-opencv ros-${ROS_DISTRO}-rosbridge-suite
 
+# Enable openCL support (openCV autodetects this & will use it to accelerate)
+RUN mkdir -p /etc/OpenCL/vendors && \
+  echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+
 # Create user & add to sudoers
 ARG USERNAME=user
 ARG USER_UID=1000

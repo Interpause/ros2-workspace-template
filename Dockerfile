@@ -53,6 +53,10 @@ RUN apt-get update && apt-get install -y \
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 10
 
+# Enable openCL support (openCV autodetects this & will use it to accelerate)
+RUN mkdir -p /etc/OpenCL/vendors && \
+  echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_setup.bash" >> ~/.bashrc
 ENTRYPOINT [ \
   # VNC entrypoint
