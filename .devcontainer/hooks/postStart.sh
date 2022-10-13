@@ -14,6 +14,6 @@ git config --global safe.directory "*"
 
 # Needed if using named volume to store repo
 test -d "/code/.git" \
-  || git clone https://github.com/Interpause/my-ros-workspace.git /code --recurse-submodules -j8
+  || git clone "insert repo url" /code --recurse-submodules -j8
 
 sudo rosdep install -i --from-path /code -y
