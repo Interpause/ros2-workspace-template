@@ -93,6 +93,8 @@ ENV DBUS_SESSION_BUS_ADDRESS="autolaunch:" \
 RUN bash /tmp/scripts/desktop-lite-debian.sh $USERNAME password
 
 COPY ./entrypoint.sh /entrypoint.sh
+# just in case
+RUN chmod +x /entrypoint.sh
 ENTRYPOINT [ \
   # VNC entrypoint
   "/usr/local/share/desktop-init.sh", \
