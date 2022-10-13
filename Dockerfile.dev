@@ -107,3 +107,6 @@ RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_set
 
 # Ensure rqt icons show up
 RUN mkdir ~/.icons && ln -s /usr/share/icons/Tango ~/.icons/hicolor
+
+# Needed for devcontainer hooks to run
+COPY ./.devcontainer /tmp/.devcontainer
