@@ -5,6 +5,8 @@
 
 # Example:
 FROM nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu20.04
+ARG DEBIAN_FRONTEND=noninteractive
+
 ENV LANG="C.UTF-8" LC_ALL="C.UTF-8"
 
 RUN echo 'Etc/UTC' > /etc/timezone \
@@ -30,6 +32,8 @@ ENV ROS_DISTRO=$ROS_DISTRO
 
 RUN apt-get update && apt-get install -y \
   ros-${ROS_DISTRO}-ros-core \
+  # Optionally add rqt for debugging
+  # ~nros-${ROS_DISTRO}-rqt* \
   python3-rosdep \
   python3-colcon-common-extensions \
   python3-pip \
@@ -37,7 +41,7 @@ RUN apt-get update && apt-get install -y \
   && rosdep update \
   && . /opt/ros/$ROS_DISTRO/setup.sh \
   && rosdep install -i --from-path /code -y \
-  && colcon build \
+  && colcon build --symlink-install \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf log/
 
@@ -58,6 +62,8 @@ RUN mkdir -p /etc/OpenCL/vendors && \
   echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_setup.bash" >> ~/.bashrc
+# ROS Server port & noVNC port respectively
+# EXPOSE 9090 6080
 ENTRYPOINT [ \
   # VNC entrypoint
   # "/usr/local/share/desktop-init.sh" \

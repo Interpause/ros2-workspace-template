@@ -9,6 +9,7 @@
 #  - There is not yet a Ubuntu 22.04 image with cudnn8
 #  - It is difficult to install CUDA in Docker properly so Nvidia's images must be used
 FROM nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu20.04
+ARG DEBIAN_FRONTEND=noninteractive
 
 # UTF-8 included in nvidia's image but not activated. Needed for a lot of things.
 ENV LANG="C.UTF-8" LC_ALL="C.UTF-8"
