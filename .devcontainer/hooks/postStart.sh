@@ -17,3 +17,4 @@ test -d "/code/.git" \
   || git clone "insert repo url" /code --recurse-submodules -j8
 
 sudo rosdep install -i --from-path /code -y
+sudo pip install -r /code/requirements.txt

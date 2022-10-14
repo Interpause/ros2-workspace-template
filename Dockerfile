@@ -41,6 +41,7 @@ RUN apt-get update && apt-get install -y \
   && rosdep update \
   && . /opt/ros/$ROS_DISTRO/setup.sh \
   && rosdep install -i --from-path /code -y \
+  && pip install -r /code/requirements.txt \
   && colcon build --symlink-install \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf log/
