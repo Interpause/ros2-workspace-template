@@ -62,6 +62,9 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 10
 RUN mkdir -p /etc/OpenCL/vendors && \
   echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 
+# Uncomment below if using rqt for icons to show up
+# RUN mkdir ~/.icons && ln -s /usr/share/icons/Tango ~/.icons/hicolor
+
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_setup.bash" >> ~/.bashrc
 # ROS Server port & noVNC port respectively
 # EXPOSE 9090 6080

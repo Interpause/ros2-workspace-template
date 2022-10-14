@@ -74,6 +74,7 @@ Run `sudo rosdep update` to update the package index.
   - One solution would be to use your own install script instead of `rosdep`.
 - Delete both the `build` and `install` folder and rebuild everything.
 - While Python code is symlinked, the `launch` files aren't, meaning rebuilding the _specific_ package is needed when `launch` files are changed.
+- In the worst case scenario, rebuild the container w/o cache.
 
 ### Docker Production Image
 
