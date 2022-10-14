@@ -4,7 +4,7 @@
 # Referring to Dockerfile.dev might be useful here.
 
 # Example:
-FROM nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu20.04
+FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu22.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 ENV LANG="C.UTF-8" LC_ALL="C.UTF-8"
@@ -27,7 +27,7 @@ RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o 
 WORKDIR /code
 COPY . .
 
-ARG ROS_DISTRO=foxy
+ARG ROS_DISTRO=humble
 ENV ROS_DISTRO=$ROS_DISTRO
 
 RUN apt-get update && apt-get install -y \

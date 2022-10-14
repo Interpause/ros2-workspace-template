@@ -8,7 +8,7 @@
 #  - Only CUDA Runtime & cuDNN needed for most AI training & inference frameworks
 #  - There is not yet a Ubuntu 22.04 image with cudnn8
 #  - It is difficult to install CUDA in Docker properly so Nvidia's images must be used
-FROM nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu20.04
+FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu22.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 # UTF-8 included in nvidia's image but not activated. Needed for a lot of things.
@@ -30,9 +30,8 @@ RUN apt-get update \
 RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" > /etc/apt/sources.list.d/ros2.list
 
-# Opted for ROS2 Foxy as we are stuck on Ubuntu 20.04 till Nvidia updates their images
 # It has the latest EOL & better ecosystem support as Humble is still too new
-ARG ROS_DISTRO=foxy 
+ARG ROS_DISTRO=humble 
 ENV ROS_DISTRO=$ROS_DISTRO
 
 # For sanity reasons, the ros-desktop download was broken up into a few steps (for example, connection error)
@@ -44,7 +43,7 @@ RUN apt-get install -y \
   python3-colcon-common-extensions \
   python3-pip
 
-# Set default version of python to be the one ROS2 Foxy uses
+# Set default version of python to be the one ROS2 Humble uses
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 10
 
 # Initialize rosdep
@@ -57,7 +56,7 @@ RUN apt-get install -y ~nros-${ROS_DISTRO}-rqt*
 # Anyways, it is better for dependency management to consciously install things.
 # See https://github.com/ros2/variants/blob/master/desktop/package.xml
 # and browse https://index.ros.org/ to find out what was installed
-# RUN apt-get install -y ros-foxy-desktop
+# RUN apt-get install -y ros-${ROS_DISTRO}-desktop
 
 # Install sudo for non-root user to use root (to install stuff).
 RUN apt-get install -y sudo git

@@ -7,7 +7,7 @@ from launch_ros.actions import Node
 PACKAGE_NAME = "pyratetest"
 
 
-# See documentation: https://github.com/ros2/launch/blob/foxy/launch/doc/source/architecture.rst
+# See documentation: https://github.com/ros2/launch/blob/humble/launch/doc/source/architecture.rst
 
 
 def generate_launch_description():

@@ -1,14 +1,14 @@
 {
   "python.autoComplete.extraPaths": [
-    "/opt/ros/foxy/lib/python3.8/site-packages",
-    "/opt/ros/foxy/local/lib/python3.8/dist-packages"
+    "/opt/ros/humble/lib/python3.8/site-packages",
+    "/opt/ros/humble/local/lib/python3.8/dist-packages"
   ],
   "python.analysis.extraPaths": [
-    "/opt/ros/foxy/lib/python3.8/site-packages",
-    "/opt/ros/foxy/local/lib/python3.8/dist-packages"
+    "/opt/ros/humble/lib/python3.8/site-packages",
+    "/opt/ros/humble/local/lib/python3.8/dist-packages"
   ],
   "python.languageServer": "Pylance",
-  "ros.distro": "foxy",
+  "ros.distro": "humble",
   "editor.formatOnSave": true,
   "python.formatting.provider": "black"
 }
