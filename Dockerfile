@@ -68,7 +68,7 @@ RUN mkdir -p /etc/OpenCL/vendors && \
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_setup.bash" >> ~/.bashrc
 # ROS Server port & noVNC port respectively
 # EXPOSE 9090 6080
-RUN chmod +x /entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 ENTRYPOINT [ \
   # VNC entrypoint
   # "/usr/local/share/desktop-init.sh" \
