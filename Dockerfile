@@ -71,7 +71,7 @@ RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_set
 RUN chmod +x ./entrypoint.sh
 ENTRYPOINT [ \
   # VNC entrypoint
-  # "/usr/local/share/desktop-init.sh" \
+  # "/usr/local/share/desktop-init.sh", \
   # ROS entrypoint
   "./entrypoint.sh" \
   ]
