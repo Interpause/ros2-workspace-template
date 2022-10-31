@@ -44,7 +44,7 @@ RUN apt-get install -y \
   python3-pip
 
 # Set default version of python to be the one ROS2 Humble uses
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 10
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 10
 
 # Initialize rosdep
 RUN rosdep init && rosdep update

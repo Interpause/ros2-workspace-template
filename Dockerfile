@@ -56,7 +56,7 @@ RUN apt-get update && apt-get install -y \
 #   DISPLAY=":1"
 # RUN bash /tmp/scripts/desktop-lite-debian.sh root password
 
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 10
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 10
 
 # Enable openCL support (openCV autodetects this & will use it to accelerate)
 RUN mkdir -p /etc/OpenCL/vendors && \
