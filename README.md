@@ -87,16 +87,18 @@ docker build . -t example/example:vx.x.x -t example/example:latest
 #### Exporting
 
 ```sh
-docker save example/example:latest -o example.tar.gz
+docker save example/example:latest -o example.tar
 ```
+
+At this point, using standard compression algorithms like `gzip` or `xzip` is recommended to save space. Docker is able to directly load `example.tar.xz` files without manually decompressing first.
 
 #### Importing
 
 ```sh
-docker load -i example.tar.gz
+docker load -i example.tar
 ```
 
-Restores the image tag used so it will still be tagged as `example/example:latest`.
+Restores the image tag used so it will still be tagged as `example/example:vx.x.x` and `example/example:latest`.
 
 #### Running
 
