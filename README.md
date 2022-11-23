@@ -8,7 +8,7 @@ All parts of the template to pay attention to have been marked with `(Optional)`
 
 ### Additional Disk Performance on Windows
 
-Following <https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-a-named-volume-for-your-entire-source-tree>, it is possible to use a named volume to store the entire repository to improve disk performance on Windows. This resolves the longer ROS build times due to the inefficiencies of bind mounting. To use a named volume, there are instructions in [`postCreate.sh`](.devcontainer/hooks/postCreate.sh) and [`docker-compose.dev.yml`](docker-compose.dev.yml).
+Following <https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-a-named-volume-for-your-entire-source-tree>, it is possible to use a named volume to store the entire repository to improve disk performance on Windows. This resolves the longer ROS build times due to the inefficiencies of bind mounting. To use a named volume, there are instructions in [`postStart.sh`](.devcontainer/hooks/postStart.sh) and [`docker-compose.dev.yml`](docker-compose.dev.yml).
 
 ## Testing
 
@@ -30,7 +30,7 @@ Each Docker image can have multiple names associated to it. In the above, taggin
 docker save example/example:vx.x.x example/example:latest -o example.tar
 ```
 
-Using compression algorithms like `gzip` or `xzip` is recommended to save space. Docker is able to load compressed images (i.e. `example.tar.xz`) without manually decompressing first.
+Compressing the image afterwards using `xzip` is recommended to save space. Docker is able to load compressed images (i.e. `example.tar.xz`) without manually decompressing first.
 
 ### Importing
 
