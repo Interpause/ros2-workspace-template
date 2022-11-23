@@ -4,15 +4,15 @@ build/*
 install/*
 log/*
 
-# python
+# Python
 __pycache__/
 *.py[cod]
 
-# cpp debug symbols
+# Cpp Debug Symbols
 .vscode/browse.vc.db*
 
-# profiling
+# Profiling
 *.lprof
 
-# others
+# Mount Points
 # e.g. data/*

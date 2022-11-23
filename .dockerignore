@@ -1,7 +1,7 @@
-# You can partially generate this from .gitignore
+# You can partially generate this from .gitignore.
 # A online converter: https://codesandbox.io/s/7e9ox7
 
-# Don't ignore .devcontainer if using volume to store repository
+# Don't ignore .devcontainer if using volume to store repository.
 
 # Config & Others
 **/.vscode

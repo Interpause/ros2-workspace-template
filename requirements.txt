@@ -1,3 +1,3 @@
-# Insert additional requirements not covered by rosdistro here
+# Insert additional requirements not covered by rosdistro here.
 
-# e.g. opencv-contrib-python-headless, numpy > 1.21
+# e.g. opencv-contrib-python-headless, numpy > 1.21, norfair
