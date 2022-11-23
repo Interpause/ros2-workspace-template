@@ -1,16 +1,27 @@
 # syntax=docker/dockerfile:1
 
 # Dockerfile for production
-# Referring to Dockerfile.dev might be useful here.
+# Referring to Dockerfile.dev might be useful for understanding the below.
 
-# Example:
 FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu22.04
+
 ARG DEBIAN_FRONTEND=noninteractive
-
 ENV LANG="C.UTF-8" LC_ALL="C.UTF-8"
-
 RUN echo 'Etc/UTC' > /etc/timezone \
   && ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
+
+# (Optional) Add VNC for debugging and control.
+# COPY ./.devcontainer/scripts/desktop-lite-debian.sh /tmp/scripts/desktop-lite-debian.sh
+# ENV DBUS_SESSION_BUS_ADDRESS="autolaunch:" \
+#   VNC_RESOLUTION="1440x768x16" \
+#   VNC_DPI="96" \
+#   VNC_PORT="5901" \
+#   NOVNC_PORT="6080" \
+#   DISPLAY=":1"
+# RUN bash /tmp/scripts/desktop-lite-debian.sh root password
+
+RUN mkdir -p /etc/OpenCL/vendors && \
+  echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 
 RUN apt-get update && apt-get install -y \
   curl \
@@ -19,7 +30,6 @@ RUN apt-get update && apt-get install -y \
   software-properties-common \
   && add-apt-repository universe \
   && rm -rf /var/lib/apt/lists/*
-
 
 RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" > /etc/apt/sources.list.d/ros2.list
@@ -32,7 +42,7 @@ ENV ROS_DISTRO=$ROS_DISTRO
 
 RUN apt-get update && apt-get install -y \
   ros-${ROS_DISTRO}-ros-core \
-  # Optionally add rqt for debugging
+  # (Optional) Add rqt for debugging and control.
   # ~nros-${ROS_DISTRO}-rqt* \
   python3-rosdep \
   python3-colcon-common-extensions \
@@ -46,33 +56,21 @@ RUN apt-get update && apt-get install -y \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf log/
 
-# Optionally add VNC for debugging
-# COPY ./.devcontainer/scripts/desktop-lite-debian.sh /tmp/scripts/desktop-lite-debian.sh
-# ENV DBUS_SESSION_BUS_ADDRESS="autolaunch:" \
-#   VNC_RESOLUTION="1440x768x16" \
-#   VNC_DPI="96" \
-#   VNC_PORT="5901" \
-#   NOVNC_PORT="6080" \
-#   DISPLAY=":1"
-# RUN bash /tmp/scripts/desktop-lite-debian.sh root password
-
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 10
 
-# Enable openCL support (openCV autodetects this & will use it to accelerate)
-RUN mkdir -p /etc/OpenCL/vendors && \
-  echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_setup.bash" >> ~/.bashrc
 
-# Uncomment below if using rqt for icons to show up
+# (Optional) Uncomment below if using rqt for icons to show up.
 # RUN mkdir ~/.icons && ln -s /usr/share/icons/Tango ~/.icons/hicolor
 
-RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_setup.bash" >> ~/.bashrc
-# ROS Server port & noVNC port respectively
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+# (Optional) Expose rosbridge port & noVNC port respectively.
 # EXPOSE 9090 6080
-RUN chmod +x ./entrypoint.sh
 ENTRYPOINT [ \
-  # VNC entrypoint
+  # (Optional) VNC entrypoint
   # "/usr/local/share/desktop-init.sh", \
   # ROS entrypoint
-  "./entrypoint.sh" \
+  "/entrypoint.sh" \
   ]
 CMD [ "bash" ]
