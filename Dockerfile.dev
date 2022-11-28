@@ -16,7 +16,7 @@ RUN echo 'Etc/UTC' > /etc/timezone \
 RUN apt-get update \
   # Needed to curl and authorize ROS repository key.
   && apt-get install -y curl gnupg lsb-release software-properties-common \
-  && apt-get install sudo git \
+  && apt-get install -y sudo git \
   # Enable universe repositories.
   && add-apt-repository universe
 
