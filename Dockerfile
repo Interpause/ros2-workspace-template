@@ -58,6 +58,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 10
 
+RUN echo "ENV=$HOME/.shrc; export ENV" >> ~/.profile
+RUN echo "exec bash" >> ~/.shrc
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_setup.bash" >> ~/.bashrc
 
 # (Optional) Uncomment below if using rqt for icons to show up.
