@@ -10,6 +10,10 @@ All parts of the template to pay attention to have been marked with `(Optional)`
 
 Following <https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-a-named-volume-for-your-entire-source-tree>, it is possible to use a named volume to store the entire repository to improve disk performance on Windows. This resolves the longer ROS build times due to the inefficiencies of bind mounting. To use a named volume, there are instructions in [`postStart.sh`](.devcontainer/hooks/postStart.sh) and [`docker-compose.dev.yml`](docker-compose.dev.yml).
 
+### Adding Volume Mounts
+
+See the example for mounting a folder to `/data` in `docker-compose.dev.yml` (under `volumes`), `.gitignore` and `.dockerignore`.
+
 ## Testing
 
 Run `ros2 run pyratetest pub` and `ros2 run pyratetest sub` in two separate terminals. Use `rqt` (see GUI section [below](#using-gui-apps)) to reconfigure both nodes live (located under Plugins > Configuration > Dynamic Reconfigure). Alternatively, use the launch file via `ros2 launch pyratetest test.launch.py`. Use `--show-args` to see the launch options.

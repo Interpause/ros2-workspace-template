@@ -14,10 +14,10 @@ build
 install
 log
 
-# Mount Points
-# e.g. data
-
 # Python Artifacts
 **/__pycache__
 **/*.py[cod]
 **/*.lprof
+
+# Mount Points
+# data
