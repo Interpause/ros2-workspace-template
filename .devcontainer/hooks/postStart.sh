@@ -14,7 +14,10 @@ git config --global safe.directory "*"
 
 # (Optional) Clone repo on first setup if using named volume to store repo.
 test -d "/code/.git" \
-  || git clone "(Optional) Insert repo url" /code --recurse-submodules -j8
+  || ( \
+    git clone "(Optional) Insert repo url" /code --recurse-submodules \
+    && git submodule foreach --recursive git checkout main \
+  )
 
 sudo rosdep install -i --from-path /code -y
 sudo pip install -r /code/requirements.txt

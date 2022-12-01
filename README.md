@@ -84,9 +84,45 @@ echo "export QT_SCALE_FACTOR=2" >> ~/.bashrc
 
 ## Additional Tips
 
+### Git Submodules
+
+When cloning a repository using `git`, it will not clone submodules by default. In order to clone submodules, use:
+
+```sh
+git clone --recurse-submodules
+```
+
+If the repository is already cloned and has empty submodules, do:
+
+```sh
+git submodule update --init --recursive
+```
+
+If you want `git` to clone submodules by default, try:
+
+```sh
+git config --global submodule.recurse true
+```
+
+Otherwise, use Github Desktop, which uses `--recurse-submodules` by default.
+
+Nonetheless, when submodules are cloned, they will be in a detached state by default, which hinders commits. Switching submodules to the main branch can either be done through VSCode's Source Control tab, or:
+
+```sh
+git submodule foreach --recursive git checkout main
+```
+
+This is done for you automatically if using a named volume to store the repository.
+
 ### Update `rosdistro` Ocassionally
 
 Run `sudo rosdep update` to update the package index.
+
+### Minimize changes to the Dockerfile
+
+If there is time for the Docker Image to rebuild, it is a good idea to reorganize the Dockerfile ocassionally. However, if in a rush, add new steps to the end instead of modifying earlier steps to take advantage of the Docker layer cache.
+
+That said, the current Dockerfiles work in most cases without needing edits. Additionally, all ROS Workspaces based on the same Dockerfile will share cache, leading to less disk usage and lower rebuild times.
 
 ## Troubleshooting
 
