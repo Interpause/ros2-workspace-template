@@ -9,7 +9,6 @@
 # this cannot be done in Dockerfile (else VSCode fails to configure git in the container).
 git config --global safe.directory "*"
 
-# Ensure all dependencies are installed.
 . /opt/ros/$ROS_DISTRO/setup.sh
 
 # (Optional) Clone repo on first setup if using named volume to store repo.
@@ -19,5 +18,6 @@ test -d "/code/.git" \
     && git submodule foreach --recursive git checkout main \
   )
 
+# Ensure all dependencies are installed.
 sudo rosdep install -i --from-path /code -y
 sudo pip install -r /code/requirements.txt
