@@ -15,6 +15,7 @@ git config --global safe.directory "*"
 test -d "/code/.git" \
   || ( \
     git clone "(Optional) Insert repo url" /code --recurse-submodules \
+    && cd /code \
     && git submodule foreach --recursive git checkout main \
   )
 
