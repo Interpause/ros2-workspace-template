@@ -86,7 +86,7 @@ ENTRYPOINT [ \
 USER $USERNAME
 
 # Make /bin/sh launch bash instead.
-RUN echo "ENV=$HOME/.shrc; export ENV" >> ~/.profile
+ENV ENV=\$HOME/.shrc
 RUN echo "exec bash" >> ~/.shrc
 # Auto-activate ROS whenever bash shell is opened.
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_setup.bash" >> ~/.bashrc
