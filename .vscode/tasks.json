@@ -3,7 +3,7 @@
   // for the documentation about the tasks.json format
   "version": "2.0.0",
   "tasks": [
-    // ROS extension is glitchy; separate tasks created for convenience.
+    // ROS extension is broken; Below tasks created for developer convenience.
     {
       "label": "rosdep install dependencies",
       "type": "shell",

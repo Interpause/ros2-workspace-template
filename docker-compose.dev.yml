@@ -1,44 +1,39 @@
 version: '3.9'
 
-# (Optional) Uncomment below to use named volume to store project repo.
+# (OPTION) Create named volume to store repository.
 # volumes:
 #   code:
 
 services:
-  # Service used for development.
   dev:
-    # NOTE: all paths below are relative to the primary docker-compose.yml file,
-    # e.g. the first in the devcontainer.json "dockerComposeFile" array.
+    # NOTE: All paths are relative to the first file in the `dockerComposeFile`
+    # array found in `devcontainer.json`.
 
     build:
       context: .
       dockerfile: Dockerfile.dev
       
-      # (Optional)(Linux only) Configure below to match host UID & GID to fix permission issues.
+      # (OPTION)(LINUX) Configure to match host's UID & GID to fix permission issues.
       # args:
       #   USER_UID: 1000 # default 1000
       #   USER_GID: 1000 # default 1000
 
     volumes:
-      # Mount project repo into container.
-      - .:/code:cached
-      # (Optional) Comment the above & uncomment below to use named volume to store project repo.
-      # - code:/code
-      # Example mount for data.
+      # (OPTION) Choose whether to use named volume to store repository.
+      # - .:/code:cached # Repository located on host is mounted into container.
+      # - code:/code # named volume used to store repository.
+      # (OPTION) Mount point for `data` folder.
       # - ./data:/data:cached
-      # (Optional) Uncomment the next line to use Docker from inside the container.
-      # See https://aka.ms/vscode-remote/samples/docker-from-docker-compose for details.
-      - /var/run/docker.sock:/var/run/docker.sock
-      # (Optional)(Linux only)(X Server) Mount host's .Xauthority to allow container to self-authenticate with X Server.
+      # (OPTION)(LINUX)(X11) Mount host's `.Xauthority` to allow container to self-authenticate with X Server.
       # - $HOME/.Xauthority:/home/user/.Xauthority:rw
 
-    # (Optional)(Linux only)(X Server) Use X Server address from host.
+    # (OPTION)(LINUX)(X11) Use X Server address from host.
     # environment:
     #   DISPLAY: ${DISPLAY}
 
-    # Better process handling by actually have an process management system (tini).
+    # Better process handling by using a process management system (tini).
     init: true
-    # Larger shared memory for VNC & ROS2's DDS.
+    # Larger shared memory for VNC & ROS2.
     shm_size: 1gb
 
     # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
@@ -54,22 +49,22 @@ services:
     # Isolate ROS2 nodes into their own network.
     network_mode: service:donor
 
-    # Overrides default command so things don't shut down after the process ends.
+    # Override default command so things don't shut down after the process ends.
     command: /bin/sh -c "while sleep 1000; do :; done"
 
-    # Request GPU.
+    # Request for GPU access.
     deploy:
       resources:
         reservations:
           devices:
             - capabilities: [gpu]
 
-  # Extension of donor service defined in docker-compose.yml.
+  # Extension of donor service defined in `docker-compose.yml`.
   donor:
-    # (Optional)(Linux only)(X Server) Needed to use host's X Server for GUI apps.
+    # (OPTION)(LINUX)(X11) Needed to use host's X Server for GUI apps.
     # network_mode: host
     ports:
-      # Expose noVNC installed by devcontainer.json features.
+      # Expose noVNC web app.
       - 6080:6080
       # Expose rosbridge.
       - 9090:9090

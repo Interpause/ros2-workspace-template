@@ -1,3 +1,4 @@
+// VS Code configuration.
 {
   "python.autoComplete.extraPaths": [
     "/opt/ros/humble/lib/python3.10/site-packages",
@@ -10,5 +11,19 @@
   "python.languageServer": "Pylance",
   "ros.distro": "humble",
   "editor.formatOnSave": true,
-  "python.formatting.provider": "black"
+  // Use black by default for formatting Python code.
+  "python.formatting.provider": "black",
+  "editor.codeActionsOnSave": {
+    // Automatically sort imports by default.
+    "source.organizeImports": true
+  },
+  // Format Python imports in a way compatible with black.
+  // See: https://github.com/microsoft/vscode-python/issues/6933#issuecomment-543059396
+  "python.sortImports.args": [
+    "--multi-line=3",
+    "--trailing-comma",
+    "--force-grid-wrap=0",
+    "--use-parentheses",
+    "--line-width=88"
+  ]
 }

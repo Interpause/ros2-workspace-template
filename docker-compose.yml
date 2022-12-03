@@ -2,7 +2,7 @@ version: '3.9'
 services:
   # Used to allow ROS2's underlying DDS to communicate across containers.
   donor:
-    image: alpine # tiniest linux image
+    image: alpine # smallest linux image
     ipc: shareable
     pid: shareable
     stop_signal: SIGKILL

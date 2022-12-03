@@ -8,12 +8,12 @@ log/*
 __pycache__/
 *.py[cod]
 
-# VSCode
+# VS Code
 .vscode
 !.vscode/*.json
 
 # Profiling
 *.lprof
 
-# Mount Points
+# (OPTION) Ignore mount points.
 # data/*

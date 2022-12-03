@@ -1,7 +1,6 @@
-# You can partially generate this from .gitignore.
-# A online converter: https://codesandbox.io/s/7e9ox7
+# `.gitignore` to `.dockerignore` converter: https://codesandbox.io/s/7e9ox7
 
-# Don't ignore .devcontainer if using volume to store repository.
+# If using named volume to store repository, don't ignore `.devcontainer`.
 
 # Config & Others
 **/.vscode
@@ -19,5 +18,5 @@ log
 **/*.py[cod]
 **/*.lprof
 
-# Mount Points
+# (OPTION) Ignore mount points.
 # data

@@ -1,12 +1,12 @@
 #!/bin/sh
-
-# postCreate.sh is called after the container is created by devcontainer.json.
-# It can be used to install & setup tools not wanted in the Dockerfile.
-
-# This mitigates the Dockerfile somehow breaking the folder permissions.
-sudo chown user:user /code
+# `postCreate.sh` is called when the Dev Container is first created.
+# It can be used for setup steps outside the Dockerfile.
 
 . /opt/ros/$ROS_DISTRO/setup.sh
-# Something removed the package indexes so we download them again for convenience.
+
+# Mitigates the Dockerfile somehow breaking folder permissions.
+sudo chown user:user /code
+
+# Something deleted the package indexes so we re-download them for convenience.
 sudo apt-get update
 sudo rosdep update

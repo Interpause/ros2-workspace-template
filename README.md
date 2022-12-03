@@ -1,92 +1,115 @@
 # ros2-workspace-template
 
-Template for ROS2 workspace using [VSCode Remote Container](https://code.visualstudio.com/docs/remote/containers) with [Docker Compose](https://docs.docker.com/compose/). Go to <http://localhost:6080/> in order to view the development container's desktop (for GUI apps).
+Template for ROS2 workspace using [VS Code Dev Containers](https://code.visualstudio.com/docs/remote/containers) & [Docker Compose](https://docs.docker.com/compose/).
 
-## Customizing
+- **Before creating the Dev Container**, do a global search for `(OPTION)` and read what they say!
+- GUI apps are viewable via [noVNC](https://novnc.com/info.html) (VNC client web app) hosted on <http://localhost:6080/>.
+  - **The password is `password`!**
 
-All parts of the template to pay attention to have been marked with `(Optional)`. Doing a global search for it should guide you in customizing the various builtin features.
+## Table of Contents
 
-### Additional Disk Performance on Windows
+- [Options](#options)
+  - [Store Repository in Named Volume](#store-repository-in-named-volume)
+  - [Mount Point `/data`](#mount-point-data)
+  - [VNC & RQT in Production Image](#vnc--rqt-in-production-image)
+  - [Native GUI Apps via X11](#native-gui-apps-via-x11)
+- [Other Features](#other-features)
+  - [`requirements.txt` Escape Hatch](#requirementstxt-escape-hatch)
+  - [VS Code Tasks](#vs-code-tasks)
+  - [Docker Image Distribution](#docker-image-distribution)
+  - [VS Code Extension Suggestions](#vs-code-extension-suggestions)
+  - [Code Formatting](#code-formatting)
+  - [Dev Container Lifecycle Hooks](#dev-container-lifecycle-hooks)
+- [Tips](#tips)
+  - [`git` Submodules](#git-submodules)
+  - [Update Package Indexes](#update-package-indexes)
+  - [Minimize Changes to the Dockerfile](#minimize-changes-to-the-dockerfile)
+  - [Change ROS Distro](#change-ros-distro)
+- [Troubleshooting](#troubleshooting)
 
-Following <https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-a-named-volume-for-your-entire-source-tree>, it is possible to use a named volume to store the entire repository to improve disk performance on Windows. This resolves the longer ROS build times due to the inefficiencies of bind mounting. To use a named volume, there are instructions in [`postStart.sh`](.devcontainer/hooks/postStart.sh) and [`docker-compose.dev.yml`](docker-compose.dev.yml).
+## Options
 
-### Adding Volume Mounts
+`(OPTION)` marks key options to consider before creating the Dev Container. `(LINUX)` and `(X11)` indicate options that are valid only if your host OS is Linux, or you use X11 on Linux. Some of the `(OPTION)`s work together to activate the features listed below:
 
-See the example for mounting a folder to `/data` in `docker-compose.dev.yml` (under `volumes`), `.gitignore` and `.dockerignore`.
+### Store Repository in Named Volume
 
-## Testing
+On Windows or MacOS, using a named volume to store the repository fixes slow build times and avoids certain issues. The steps for this feature are:
 
-Run `ros2 run pyratetest pub` and `ros2 run pyratetest sub` in two separate terminals. Use `rqt` (see GUI section [below](#using-gui-apps)) to reconfigure both nodes live (located under Plugins > Configuration > Dynamic Reconfigure). Alternatively, use the launch file via `ros2 launch pyratetest test.launch.py`. Use `--show-args` to see the launch options.
+1. ([`docker-compose.dev.yml`](./docker-compose.dev.yml)) Create a named volume to store the repository.
+2. ([`docker-compose.dev.yml`](./docker-compose.dev.yml)) Mount the named volume to `/code` where the repository should be.
+3. ([`postStart.sh`](./.devcontainer/hooks/postStart.sh)) Clone the repository into the named volume.
 
-## Docker Image Distribution
+See <https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-a-named-volume-for-your-entire-source-tree> for more info.
 
-### Building
+### Mount Point `/data`
 
-```sh
-docker build . -t example/example:vx.x.x -t example/example:latest
-```
+Mount points are used to mount a folder from the host into the container. By following `(OPTION)`s, `./data` on the host is mounted to `/data` in the container. `/data` can be used to share anything from the host with the container (e.g., config files, models, databases).
 
-Each Docker image can have multiple names associated to it. In the above, tagging the image by both the version number and as latest helps for distributing images.
+While one mount point is sufficient, more can be added by following `/data`'s example. See <https://docs.docker.com/storage/bind-mounts/> for more info.
 
-### Exporting
+### VNC & RQT in Production Image
 
-```sh
-docker save example/example:vx.x.x example/example:latest -o example.tar
-```
+By default, noVNC & RQT are not installed in the production image to save space. It is recommended to use ROS CLI or create a proper API instead to manage ROS systems. However, they can be enabled by following `(OPTION)`s in [`Dockerfile`](./Dockerfile). This can be convenient for early stages of deployment.
 
-Compressing the image afterwards using `xzip` is recommended to save space. Docker is able to load compressed images (i.e. `example.tar.xz`) without manually decompressing first.
+### Native GUI Apps via X11
 
-### Importing
+For Linux users, it is possible for GUI apps in the container to show natively on the host if using X11 instead of Wayland. For Windows users, it is also possible via software like [VcXsrv](https://sourceforge.net/projects/vcxsrv/).
 
-```sh
-docker load -i example.tar.xz
-```
+## Other Features
 
-Imports the Docker image and its names. It will still be tagged as `example/example:vx.x.x` and `example/example:latest`, conveniently replacing the old image that was tagged as `latest`.
+### `requirements.txt` Escape Hatch
 
-## Using GUI Apps
+Some dependencies may be unavailable from the `rosdep` package manager (check [ROS Index](https://index.ros.org)). For Python dependencies, they should be added to a `requirements.txt` created within the ROS package. The ROS package's `requirements.txt` should then be composed into the workspace's [`requirements.txt`](./requirements.txt) (example in [`requirements.txt`](./requirements.txt)). For other dependencies, they should be added to both Dockerfiles. See <https://github.com/ros/rosdistro/blob/master/CONTRIBUTING.md#rosdep-rules-contributions> with regards to adding new packages to `rosdep`.
 
-For ease of usage, the VNC approach is default over the X Server approach. ~~However, the X Server approach is more performant.~~ The X Server approach is only more performant on Linux, whereas on Windows, the VNC approach performs better. However, the X Server approach has a more native feel.
+### VS Code Tasks
 
-### Connecting to VNC
+For developer convenience, some common tasks such as building packages and installing dependencies are present in [`tasks.json`](./.vscode/tasks.json). Use them by opening the command bar and typing `task`.
 
-Go to <http://localhost:6080/> to view the container's desktop via the noVNC web client, or use a VNC client of your choice.
+### Docker Image Distribution
 
-### Using Host's X Server
+See <https://docs.docker.com/engine/reference/commandline/docker/> for more info.
 
-#### Linux
-
-Within [`docker-compose.dev.yml`](docker-compose.dev.yml), there are comments such as the below:
-
-```yml
-# (Optional)(Linux only)(X Server) Use X Server address from host.
-# environment:
-#   DISPLAY: ${DISPLAY}
-```
-
-Uncomment these in order for GUI apps in the container to use the host Linux's X Server.
-
-#### Windows
-
-On Windows, installing an X Server such as [VcXsrv](https://sourceforge.net/projects/vcxsrv/) is required. You will also need to set the `DISPLAY` environment. For example, insert the below into [`.devcontainer/hooks/postStart.sh`](.devcontainer/hooks/postStart.sh):
-
-```sh
-# postStart.sh
-echo "export DISPLAY=host.docker.internal:0.0" >> ~/.bashrc
-```
-
-If using a high-resolution display, `rqt` might appear small, in which case adjusting `QT_SCALE_FACTOR` might help:
+#### Building
 
 ```sh
-# postStart.sh
-echo "export QT_SCALE_FACTOR=2" >> ~/.bashrc
+docker build . -t organization/repo:vx.x.x -t organization/repo:latest
 ```
 
-## Additional Tips
+Images can have multiple names tagged to them. Tagging images with the version number and as latest helps when distributing images.
 
-### Git Submodules
+#### Exporting
 
-When cloning a repository using `git`, it will not clone submodules by default. In order to clone submodules, use:
+```sh
+docker save organization/repo:vx.x.x organization/repo:latest -o repo-vx.x.x.tar
+```
+
+Compressing the image afterwards using `xzip` is recommended to save space. Docker is able to load compressed images (i.e., `repo-vx.x.x.tar.xz`) without decompressing manually.
+
+#### Importing
+
+```sh
+docker load -i repo-vx.x.x.tar.xz
+```
+
+Imports the image and its names. It will still be tagged as `organization/repo:vx.x.x` and `organization/repo:latest`, conveniently replacing the previous `latest`.
+
+### VS Code Extension Suggestions
+
+Both [`devcontainer.json`](./.devcontainer/devcontainer.json) and [`extensions.json`](./.vscode/extensions.json) are configured such that VS Code will automatically install some extensions. These are highly recommended for developer experience.
+
+### Code Formatting
+
+[`black`](https://github.com/psf/black) is used to format Python code due to its uncompromising design. Imports are also automatically sorted using compatible rules. See [`settings.json`](./.vscode/settings.json) for the configuration.
+
+### Dev Container Lifecycle Hooks
+
+[`devcontainer.json`](./.devcontainer/devcontainer.json) allows adding lifecycle hooks which can be useful for special cases. See the [`hooks`](./.devcontainer/hooks/) folder for some examples.
+
+## Tips
+
+### `git` Submodules
+
+It is recommended to add custom ROS packages to the workspace via [`git` Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules). However, when cloning a repository using `git`, it will not clone submodules by default. In order to clone submodules, use:
 
 ```sh
 git clone --recurse-submodules
@@ -104,9 +127,9 @@ If you want `git` to clone submodules by default, try:
 git config --global submodule.recurse true
 ```
 
-Otherwise, use Github Desktop, which uses `--recurse-submodules` by default.
+Otherwise, use [Github Desktop](https://desktop.github.com/), which uses `--recurse-submodules` by default.
 
-Nonetheless, when submodules are cloned, they will be in a detached state by default, which hinders commits. Switching submodules to the main branch can either be done through VSCode's Source Control tab, or:
+Nonetheless, when submodules are cloned, they will be in a detached state, which prevents committing. Switching submodules to the main branch can either be done through VS Code's Source Control tab, or:
 
 ```sh
 git submodule foreach --recursive git checkout main
@@ -114,32 +137,29 @@ git submodule foreach --recursive git checkout main
 
 This is done for you automatically if using a named volume to store the repository.
 
-### Update `rosdistro` Ocassionally
+### Update Package Indexes
 
-Run `sudo rosdep update` to update the package index.
+The `rosdep` and Ubuntu package managers rely on a local cache of their package index. If the package index is outdated, it may not contain any active package distribution server, leading to package downloads failing. Hence, it is recommended to periodically re-download the package index:
+
+```sh
+sudo apt-get update
+sudo rosdep update
+```
 
 ### Minimize changes to the Dockerfile
 
-If there is time for the Docker Image to rebuild, it is a good idea to reorganize the Dockerfile ocassionally. However, if in a rush, add new steps to the end instead of modifying earlier steps to take advantage of the Docker layer cache.
+When a step in the Dockerfile is changed, subsequent steps are invalidated and need to be rebuilt. Furthermore, ROS workspaces with the same Dockerfile share cache, resulting in less disk usage and shorter rebuilds.
 
-That said, the current Dockerfiles work in most cases without needing edits. Additionally, all ROS Workspaces based on the same Dockerfile will share cache, leading to less disk usage and lower rebuild times.
+The current Dockerfiles should work in most cases without needing edits. Nonetheless, if the Dockerfile becomes too complex, re-organizing it is fine.
+
+### Change ROS Distro
+
+To change ROS Distro, do a global search for the current distro (`humble`) and replace as necessary with the new distro. Afterwards, rebuild the Dev Container.
 
 ## Troubleshooting
 
 - `rosdep` has no version lock, see: <https://github.com/ros-infrastructure/rosdep/issues/325>.
   - One solution would be to use your own install script instead of `rosdep`.
 - Delete both the `build` and `install` folder and rebuild everything.
-- While Python code is symlinked, the `launch` files aren't, meaning rebuilding the _specific_ package is needed when `launch` files are changed.
-- In the worst case scenario, rebuild the container without cache.
-
-## Conventions
-
-### `Dockerfile` Naming
-
-`Dockerfile` may be suffixed when multiple images (with different dependencies) are built within a project. For example, `Dockerfile.ui` for the production UI image, `Dockerfile.talker` for the ROS2 talker node, and `Dockerfile.listener` for the ROS2 listener node. If there is only one image or a "main image", `Dockerfile` should be unsuffixed.
-
-For development, ideally a single `Dockerfile.dev` that is comprehensive (i.e. having all dependencies) should be used (to minimize rebuilding & wasted space for multiple images).
-
-### `docker-compose.yml` Naming
-
-`docker-compose.yml` may be suffixed for special configurations. For example, `docker-compose.dev.yml` for development, `docker-compose.ci.yml` for testing, or `docker-compose.prod.yml` for production. `docker-compose.yml` unsuffixed should be the base/common configuration.
+- While Python code is symlinked, the ROS `launch` files aren't, meaning rebuilding the _specific_ package is needed when `launch` files are changed.
+- Rebuild the container without cache.

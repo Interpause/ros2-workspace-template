@@ -1,4 +1,4 @@
-# Insert additional requirements not covered by rosdistro here.
+# Insert Python requirements that aren't available on https://index.ros.org/.
 
 # e.g. opencv-contrib-python-headless, numpy > 1.21, norfair
 # or -r ./some-module/some-package/requirements.txt

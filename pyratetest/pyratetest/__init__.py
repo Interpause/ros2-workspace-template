@@ -1,5 +1,5 @@
 """
-Simple example PubSub to measure communication rate. Surprisingly, the rqt
+Simple example PubSub to measure communication rate. Surprisingly, the RQT
 topic monitor plugin chokes if the messages are:
 - big (like images)
 - very rapid

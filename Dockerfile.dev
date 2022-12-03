@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
 
 # Dockerfile for development
-# Please create a separate Dockerfile with more precise dependencies for production.
+# Below RUN statements are broken up to take advantage of Docker layer cache.
 
-# If developing without a Nvidia GPU, using base Ubuntu 22.04 is possible.
+# (OPTION) Use base Ubuntu 22.04 if a Nvidia GPU is unavailable.
 # FROM ubuntu:22.04
 FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu22.04
 
@@ -12,7 +12,6 @@ ENV LANG="C.UTF-8" LC_ALL="C.UTF-8"
 RUN echo 'Etc/UTC' > /etc/timezone \
   && ln -s /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
-# Below RUN statements are broken up to take advantage of Docker layer cache.
 RUN apt-get update \
   # Needed to curl and authorize ROS repository key.
   && apt-get install -y curl gnupg lsb-release software-properties-common \
@@ -20,7 +19,7 @@ RUN apt-get update \
   # Enable universe repositories.
   && add-apt-repository universe
 
-# Create user & add to sudoers.
+# Create user and add to sudoers.
 ARG USERNAME=user
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
@@ -30,7 +29,7 @@ RUN groupadd -g $USER_GID $USERNAME \
   && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
   && chmod 0440 /etc/sudoers.d/$USERNAME
 
-# Add VNC for debugging and control.
+# Add VNC server & noVNC web app for debugging and control.
 COPY ./.devcontainer/scripts/desktop-lite-debian.sh /tmp/scripts/desktop-lite-debian.sh
 ENV DBUS_SESSION_BUS_ADDRESS="autolaunch:" \
   VNC_RESOLUTION="1440x768x16" \
@@ -40,11 +39,11 @@ ENV DBUS_SESSION_BUS_ADDRESS="autolaunch:" \
   DISPLAY=":1"
 RUN bash /tmp/scripts/desktop-lite-debian.sh $USERNAME password
 
-# Enable openCL support (OpenCV autodetects this & will use it to accelerate).
+# Enable openCL support (OpenCV uses it for hardware acceleration).
 RUN mkdir -p /etc/OpenCL/vendors && \
   echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 
-# Curl key & authorize ROS repository.
+# Curl key and authorize ROS repository.
 RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" > /etc/apt/sources.list.d/ros2.list
 
@@ -52,8 +51,6 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/r
 ARG ROS_DISTRO=humble 
 ENV ROS_DISTRO=$ROS_DISTRO
 
-# Upgrading all system packages to latest is optional.
-# RUN apt-get update && apt-get upgrade -y
 RUN apt-get update
 RUN apt-get install -y \
   ros-${ROS_DISTRO}-ros-base \
@@ -64,26 +61,17 @@ RUN apt-get install -y \
 # Set default version of Python to be the one ROS Humble uses.
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 10
 
-# Initialize rosdep.
+# Initialize rosdep package manager.
 RUN rosdep init && rosdep update
 
-# rqt comes with useful debugging and control tools.
-# rqt's plugin support allows for custom visualizations, tools or control panels.
+# RQT comes with useful debugging and control tools.
+# RQT's plugin support allows for custom visualizations, tools or control panels.
 RUN apt-get install -y ~nros-${ROS_DISTRO}-rqt*
 
-# One of the dependencies breaks Xsession. So we won't use the entire ROS desktop suite.
-# It is better for dependency management anyways to explicitly choose what is installed.
-# See https://github.com/ros2/variants/blob/master/desktop/package.xml
-# and browse https://index.ros.org/ to find out what is in the ROS desktop suite.
-# RUN apt-get install -y ros-${ROS_DISTRO}-desktop
-
-# Install some common dependencies.
-# RUN apt-get install -y python3-opencv ros-${ROS_DISTRO}-rosbridge-suite
-
-# Use Python Black formatter.
+# Use black by default for formatting Python code.
 RUN apt-get install -y black
 
-# Needed for devcontainer hooks to run.
+# Needed for Dev Container lifecycle hooks to run.
 COPY ./.devcontainer /tmp/.devcontainer
 
 COPY ./entrypoint.sh /entrypoint.sh
@@ -100,8 +88,8 @@ USER $USERNAME
 # Make /bin/sh launch bash instead.
 RUN echo "ENV=$HOME/.shrc; export ENV" >> ~/.profile
 RUN echo "exec bash" >> ~/.shrc
-# Auto-activate ROS whenever shell is opened.
+# Auto-activate ROS whenever bash shell is opened.
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_setup.bash" >> ~/.bashrc
 
-# Ensure rqt icons show up.
+# Ensure RQT icons show up.
 RUN mkdir ~/.icons && ln -s /usr/share/icons/Tango ~/.icons/hicolor
