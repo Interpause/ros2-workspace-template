@@ -22,6 +22,7 @@ Template for ROS2 workspace using [VS Code Dev Containers](https://code.visualst
   - [Dev Container Lifecycle Hooks](#dev-container-lifecycle-hooks)
 - [Tips](#tips)
   - [`git` Submodules](#git-submodules)
+  - [`example_module`](#example_module)
   - [Update Package Indexes](#update-package-indexes)
   - [Minimize Changes to the Dockerfile](#minimize-changes-to-the-dockerfile)
   - [Change ROS Distro](#change-ros-distro)
@@ -136,6 +137,14 @@ git submodule foreach --recursive git checkout main
 ```
 
 This is done for you automatically if using a named volume to store the repository.
+
+### `example_module`
+
+`example_module`'s [README.md](./example_module/README.md) provides instructions on how to create a `git` submodule and add ROS packages to it. It also contains a simple pub-sub `launch` file that can be used to test bandwidth & latency. To remove `example_module`:
+
+```sh
+git rm example_module
+```
 
 ### Update Package Indexes
 

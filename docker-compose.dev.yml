@@ -20,7 +20,7 @@ services:
 
     volumes:
       # (OPTION) Choose whether to use named volume to store repository.
-      # - .:/code:cached # Repository located on host is mounted into container.
+      - .:/code:cached # Repository located on host is mounted into container.
       # - code:/code # named volume used to store repository.
       # (OPTION) Mount point for `data` folder.
       # - ./data:/data:cached

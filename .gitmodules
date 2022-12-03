@@ -1,0 +1,3 @@
+[submodule "example_module"]
+	path = example_module
+	url = https://github.com/Interpause/ros-example-node.git
