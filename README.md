@@ -172,3 +172,6 @@ To change ROS Distro, do a global search for the current distro (`humble`) and r
 - Delete both the `build` and `install` folder and rebuild everything.
 - While Python code is symlinked, the ROS `launch` files aren't, meaning rebuilding the _specific_ package is needed when `launch` files are changed.
 - Rebuild the container without cache.
+- If Dev Container fails and complains about `/r`, it means some files were checked out with CRLF instead of LF line endings.
+  - Do `git config --global core.autocrlf input` and re-clone the repository.
+  - See <https://stackoverflow.com/questions/3206843/how-line-ending-conversions-work-with-git-core-autocrlf-between-different-operat> for more info.
