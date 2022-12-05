@@ -13,11 +13,6 @@ services:
       context: .
       dockerfile: Dockerfile.dev
       
-      # (OPTION)(LINUX) Configure to match host's UID & GID to fix permission issues.
-      # args:
-      #   USER_UID: 1000 # default 1000
-      #   USER_GID: 1000 # default 1000
-
     volumes:
       # (OPTION) Choose whether to use named volume to store repository.
       - .:/code:cached # Repository located on host is mounted into container.

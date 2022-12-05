@@ -20,6 +20,7 @@ Template for ROS2 workspace using [VS Code Dev Containers](https://code.visualst
   - [VS Code Extension Suggestions](#vs-code-extension-suggestions)
   - [Code Formatting](#code-formatting)
   - [Dev Container Lifecycle Hooks](#dev-container-lifecycle-hooks)
+  - [Dev Container using Docker Compose](#dev-container-using-docker-compose)
 - [Tips](#tips)
   - [`git` Submodules](#git-submodules)
   - [`example_module`](#example_module)
@@ -106,6 +107,15 @@ Both [`devcontainer.json`](./.devcontainer/devcontainer.json) and [`extensions.j
 
 [`devcontainer.json`](./.devcontainer/devcontainer.json) allows adding lifecycle hooks which can be useful for special cases. See the [`hooks`](./.devcontainer/hooks/) folder for some examples.
 
+### Dev Container using Docker Compose
+
+Instead of using Dev Container with a Dockerfile, this template uses it with Docker Compose instead. This is done for a few reasons:
+
+- Auto-create named volume for [Store Repository in Named Volume](#store-repository-in-named-volume) instead of manually creating it.
+- Include example of multiple Docker containers being capable of operating as one ROS system.
+- Docker Compose is closer to real world deployment scenarios.
+  - It is also more flexible and easier to configure than [`devcontainer.json`](./.devcontainer/devcontainer.json).
+
 ## Tips
 
 ### `git` Submodules
@@ -140,7 +150,7 @@ This is done for you automatically if using a named volume to store the reposito
 
 ### `example_module`
 
-`example_module`'s [README.md](./example_module/README.md) provides instructions on how to create a `git` submodule and add ROS packages to it. It also contains a simple pub-sub `launch` file that can be used to test bandwidth & latency. To remove `example_module`:
+`example_module`'s [README.md](https://github.com/Interpause/ros-example-node/blob/main/README.md) provides instructions on how to create a `git` submodule and add ROS packages to it. It also contains a simple pub-sub `launch` file that can be used to test bandwidth & latency. To remove `example_module`:
 
 ```sh
 git rm example_module
@@ -167,11 +177,23 @@ To change ROS Distro, do a global search for the current distro (`humble`) and r
 
 ## Troubleshooting
 
-- `rosdep` has no version lock, see: <https://github.com/ros-infrastructure/rosdep/issues/325>.
-  - One solution would be to use your own install script instead of `rosdep`.
-- Delete both the `build` and `install` folder and rebuild everything.
-- While Python code is symlinked, the ROS `launch` files aren't, meaning rebuilding the _specific_ package is needed when `launch` files are changed.
-- Rebuild the container without cache.
-- If Dev Container fails and complains about `/r`, it means some files were checked out with CRLF instead of LF line endings.
+### Setup Issues
+
+- On first setup, the Dev Container fails to build and complains about `/r`.
+  - The Dev Container lifecycle hooks were checked out with CRLF instead of LF line endings.
   - Do `git config --global core.autocrlf input` and re-clone the repository.
-  - See <https://stackoverflow.com/questions/3206843/how-line-ending-conversions-work-with-git-core-autocrlf-between-different-operat> for more info.
+  - See <https://code.visualstudio.com/docs/remote/troubleshooting#_resolving-git-line-ending-issues-in-wsl-resulting-in-many-modified-files> for more info.
+- When modifying the Dockerfile, earlier cached steps might be stale, causing later steps to fail.
+  - Rebuild the Dev Container without cache.
+
+### Build Issues
+
+- Try deleting the `build` and `install` folders before rebuilding all packages.
+
+### Runtime Issues
+
+- `rosdep` has no version lock, which means there is no protection against breaking changes when packages update.
+  - See: <https://github.com/ros-infrastructure/rosdep/issues/325>
+  - One solution would be to use your own install script instead of `rosdep`.
+- ROS `launch` files aren't symlinked unlike Python code.
+  - Rebuild the package when `launch` files are modified.
