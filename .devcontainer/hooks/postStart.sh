@@ -18,6 +18,10 @@ test -d "/code/.git" \
     && git submodule foreach --recursive git checkout main \
   )
 
+# (OPTION) Symlink `/data` to `/code/data` for convenience if using `/data` mount point.
+# sudo chown user:user /data
+# sudo ln -sf /data /code/data
+
 # Ensure dependencies are installed.
 sudo rosdep install -i --from-path /code -y
 sudo pip install -r /code/requirements.txt

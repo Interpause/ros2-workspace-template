@@ -16,4 +16,4 @@ __pycache__/
 *.lprof
 
 # (OPTION) Ignore mount points.
-# data/*
+# /data
