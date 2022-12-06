@@ -68,9 +68,6 @@ RUN rosdep init && rosdep update
 # RQT's plugin support allows for custom visualizations, tools or control panels.
 RUN apt-get install -y ~nros-${ROS_DISTRO}-rqt*
 
-# Use black by default for formatting Python code.
-RUN apt-get install -y black
-
 # Needed for Dev Container lifecycle hooks to run.
 COPY ./.devcontainer /tmp/.devcontainer
 
