@@ -10,20 +10,22 @@
   ],
   "python.languageServer": "Pylance",
   "ros.distro": "humble",
+
+  // Format code & sort imports on save.
   "editor.formatOnSave": true,
-  // Use black by default for formatting Python code.
-  "python.formatting.provider": "black",
   "editor.codeActionsOnSave": {
-    // Automatically sort imports by default.
     "source.organizeImports": true
   },
-  // Format Python imports in a way compatible with black.
-  // See: https://github.com/microsoft/vscode-python/issues/6933#issuecomment-543059396
-  "python.sortImports.args": [
-    "--multi-line=3",
-    "--trailing-comma",
-    "--force-grid-wrap=0",
-    "--use-parentheses",
-    "--line-width=88"
-  ]
+
+  // Use Prettier to format config files.
+  "[json][jsonc][yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // Use black to format Python code.
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  // Make Python import sorting compatible with black.
+  "isort.args": ["--profile", "black"]
+  // NOTE: Insert other ROS client library languages below:
 }

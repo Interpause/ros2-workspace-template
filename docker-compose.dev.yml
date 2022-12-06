@@ -12,7 +12,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-      
+
     volumes:
       # (OPTION) Choose whether to use named volume to store repository.
       - .:/code:cached # Repository located on host is mounted into container.

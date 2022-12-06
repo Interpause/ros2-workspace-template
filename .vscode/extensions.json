@@ -1,9 +1,11 @@
-// Extensions suggested.
+// Extensions on host.
 {
   "recommendations": [
+    // Needed to launch Dev Containers.
     "ms-vscode-remote.remote-containers",
+    // Useful for inspecting & controlling Docker.
     "ms-azuretools.vscode-docker",
-    "esbenp.prettier-vscode",
-    "twxs.cmake"
+    // Format JSON & other config files.
+    "esbenp.prettier-vscode"
   ]
 }

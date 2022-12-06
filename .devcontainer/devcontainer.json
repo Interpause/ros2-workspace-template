@@ -15,18 +15,28 @@
   "remoteUser": "user",
   "customizations": {
     "vscode": {
-      // Extensions suggested.
+      // Extensions in container.
       "extensions": [
-        "njpwerner.autodocstring",
-        "bungcip.better-toml",
+        // VS Code's Intellisense.
         "VisualStudioExptTeam.vscodeintellicode",
+        // Format markdown.
         "DavidAnson.vscode-markdownlint",
+        // Format JSON & other config files.
         "esbenp.prettier-vscode",
-        "ms-python.vscode-pylance",
-        "ms-python.python",
-        "ms-azuretools.vscode-docker",
+        // ROS utilities.
         "ms-iot.vscode-ros",
-        "twxs.cmake"
+        // ROS Message Definitions use CMake.
+        "twxs.cmake",
+        // Python support.
+        "ms-python.python",
+        // Intelligent Python features.
+        "ms-python.vscode-pylance",
+        // Python formatter.
+        "ms-python.black-formatter",
+        // Python import sorter.
+        "ms-python.isort",
+        // Auto-generate Python doc strings.
+        "njpwerner.autodocstring"
       ]
     }
   }
