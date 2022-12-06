@@ -9,7 +9,7 @@ __pycache__/
 *.py[cod]
 
 # VS Code
-.vscode
+.vscode/*
 !.vscode/*.json
 
 # Profiling
