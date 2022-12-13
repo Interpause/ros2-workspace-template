@@ -43,6 +43,8 @@ On Windows or MacOS, using a named volume to store the repository fixes slow bui
 
 See <https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-a-named-volume-for-your-entire-source-tree> for more info.
 
+**NOTE**: A named volume is like a virtual hard disk. As such, changes made in the named volume's copy of the repository will not reflect on the host system's copy. To synchronize the changes, use `git`.
+
 ### Mount Point `/data`
 
 Mount points are used to mount a folder from the host into the container. By following `(OPTION)`s, `./data` on the host is mounted to `/data` in the container. `/data` can be used to share anything from the host with the container (e.g., config files, models, databases).
