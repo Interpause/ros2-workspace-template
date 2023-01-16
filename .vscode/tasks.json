@@ -21,6 +21,12 @@
       "type": "shell",
       "command": "colcon build --symlink-install --packages-select ${input:package}",
       "problemMatcher": []
+    },
+    {
+      "label": "update package index",
+      "type": "shell",
+      "command": "apt-get update && rosdep update",
+      "problemMatcher": []
     }
   ],
   "inputs": [
