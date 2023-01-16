@@ -2,17 +2,17 @@
 
 Template for ROS2 workspace using [VS Code Dev Containers](https://code.visualstudio.com/docs/remote/containers) & [Docker Compose](https://docs.docker.com/compose/).
 
-- **Before creating the Dev Container**, do a global search for `(OPTION)` and read what they say!
+- Use `Dev Containers: Clone Repository in Container Volume...` in VS Code's Command Palette to auto-magically setup everything!
+- For customization, do a global find & replace for `(OPTION)`.
+  - Remember to `Dev Containers: Rebuild Container` afterwards!
 - GUI apps are viewable via [noVNC](https://novnc.com/info.html) (VNC client web app) hosted on <http://localhost:6080/>.
   - **The password is `password`!**
 
 ## Table of Contents
 
 - [Options](#options)
-  - [Store Repository in Named Volume](#store-repository-in-named-volume)
   - [Mount Point `/data`](#mount-point-data)
   - [VNC & RQT in Production Image](#vnc--rqt-in-production-image)
-  - [Native GUI Apps via X11](#native-gui-apps-via-x11)
 - [Other Features](#other-features)
   - [`requirements.txt` Escape Hatch](#requirementstxt-escape-hatch)
   - [VS Code Tasks](#vs-code-tasks)
@@ -31,19 +31,7 @@ Template for ROS2 workspace using [VS Code Dev Containers](https://code.visualst
 
 ## Options
 
-`(OPTION)` marks key options to consider before creating the Dev Container. `(LINUX)` and `(X11)` indicate options that are valid only if your host OS is Linux, or you use X11 on Linux. Some of the `(OPTION)`s work together to activate the features listed below:
-
-### Store Repository in Named Volume
-
-On Windows or MacOS, using a named volume to store the repository fixes slow build times and avoids certain issues. The steps for this feature are:
-
-1. ([`docker-compose.dev.yml`](./docker-compose.dev.yml)) Create a named volume to store the repository.
-2. ([`docker-compose.dev.yml`](./docker-compose.dev.yml)) Mount the named volume to `/code` where the repository should be.
-3. ([`postStart.sh`](./.devcontainer/hooks/postStart.sh)) Clone the repository into the named volume.
-
-See <https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-a-named-volume-for-your-entire-source-tree> for more info.
-
-**NOTE**: A named volume is like a virtual hard disk. As such, changes made in the named volume's copy of the repository will not reflect on the host system's copy. To synchronize the changes, use `git`.
+`(OPTION)` marks key options to consider before creating the Dev Container. Some of the `(OPTION)`s work together to activate the features listed below:
 
 ### Mount Point `/data`
 
@@ -55,10 +43,6 @@ While one mount point is sufficient, more can be added by following `/data`'s ex
 
 By default, noVNC & RQT are not installed in the production image to save space. It is recommended to use ROS CLI or create a proper API instead to manage ROS systems. However, they can be enabled by following `(OPTION)`s in [`Dockerfile`](./Dockerfile). This can be convenient for early stages of deployment.
 
-### Native GUI Apps via X11
-
-For Linux users, it is possible for GUI apps in the container to show natively on the host if using X11 instead of Wayland. For Windows users, it is also possible via software like [VcXsrv](https://sourceforge.net/projects/vcxsrv/).
-
 ## Other Features
 
 ### `requirements.txt` Escape Hatch
@@ -67,7 +51,12 @@ Some dependencies may be unavailable from the `rosdep` package manager (check [R
 
 ### VS Code Tasks
 
-For developer convenience, some common tasks such as building packages and installing dependencies are present in [`tasks.json`](./.vscode/tasks.json). Use them by opening the command bar and typing `task`.
+For developer convenience, some common tasks are present in [`tasks.json`](./.vscode/tasks.json). Use them by opening the Command Palette and typing `task`. The following tasks are available:
+
+- `rosdep install dependencies`: Install all dependencies of the current workspace.
+- `colcon build all`: Build all (detected) ROS packages.
+- `colcon build specific`: Build a specific ROS package.
+- `update package index`: Update Ubuntu and ROS package indexes.
 
 ### Docker Image Distribution
 
@@ -113,7 +102,6 @@ Both [`devcontainer.json`](./.devcontainer/devcontainer.json) and [`extensions.j
 
 Instead of using Dev Container with a Dockerfile, this template uses it with Docker Compose instead. This is done for a few reasons:
 
-- Auto-create named volume for [Store Repository in Named Volume](#store-repository-in-named-volume) instead of manually creating it.
 - Include example of multiple Docker containers being capable of operating as one ROS system.
 - Docker Compose is closer to real world deployment scenarios.
   - It is also more flexible and easier to configure than [`devcontainer.json`](./.devcontainer/devcontainer.json).
@@ -121,6 +109,8 @@ Instead of using Dev Container with a Dockerfile, this template uses it with Doc
 ## Tips
 
 ### `git` Submodules
+
+> Note: The template will clone missing submodules for you by default.
 
 It is recommended to add custom ROS packages to the workspace via [`git` Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules). However, when cloning a repository using `git`, it will not clone submodules by default. In order to clone submodules, use:
 
