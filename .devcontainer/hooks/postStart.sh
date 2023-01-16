@@ -19,9 +19,8 @@ test -d "/code/.git" \
   )
 
 # (OPTION) Symlink `/data` to `/code/data` for convenience if using `/data` mount point.
-# sudo chown user:user /data
-# sudo ln -sf /data /code/
+# ln -sf /data /code/
 
 # Ensure dependencies are installed.
-sudo rosdep install -i --from-path /code -y
-sudo pip install -r /code/requirements.txt
+rosdep install -i --from-path /code -y
+pip install -r /code/requirements.txt

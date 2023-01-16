@@ -163,8 +163,8 @@ git rm example_module
 The `rosdep` and Ubuntu package managers rely on a local cache of their package index. If the package index is outdated, it may not contain any active package distribution server, leading to package downloads failing. Hence, it is recommended to periodically re-download the package index:
 
 ```sh
-sudo apt-get update
-sudo rosdep update
+apt-get update
+rosdep update
 ```
 
 ### Minimize changes to the Dockerfile

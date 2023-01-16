@@ -7,7 +7,7 @@
     {
       "label": "rosdep install dependencies",
       "type": "shell",
-      "command": "sudo rosdep install -i --from-path /code -y",
+      "command": "rosdep install --ignore-src --from-path . -y",
       "problemMatcher": []
     },
     {

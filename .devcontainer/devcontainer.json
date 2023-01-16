@@ -12,7 +12,6 @@
   // Please follow the same method of creating shell scripts in the `hooks` folder.
   "postCreateCommand": ". /tmp/.devcontainer/hooks/postCreate.sh",
   "postStartCommand": ". /tmp/.devcontainer/hooks/postStart.sh",
-  "remoteUser": "user",
   "remoteEnv": {
     "WORKSPACE_ROOT": "${containerWorkspaceFolder}"
   },

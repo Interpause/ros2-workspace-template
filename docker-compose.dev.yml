@@ -20,7 +20,7 @@ services:
       # (OPTION) Mount point for `data` folder.
       # - ./data:/data:cached
       # (OPTION)(LINUX)(X11) Mount host's `.Xauthority` to allow container to self-authenticate with X Server.
-      # - $HOME/.Xauthority:/home/user/.Xauthority:rw
+      # - $HOME/.Xauthority:/home/root/.Xauthority:rw
 
     # (OPTION)(LINUX)(X11) Use X Server address from host.
     # environment:

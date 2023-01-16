@@ -15,19 +15,9 @@ RUN echo 'Etc/UTC' > /etc/timezone \
 RUN apt-get update \
   # Needed to curl and authorize ROS repository key.
   && apt-get install -y curl gnupg lsb-release software-properties-common \
-  && apt-get install -y sudo git \
+  && apt-get install -y git \
   # Enable universe repositories.
   && add-apt-repository universe
-
-# Create user and add to sudoers.
-ARG USERNAME=user
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-ARG USER_SH=/bin/bash
-RUN groupadd -g $USER_GID $USERNAME \
-  && useradd -u $USER_UID -g $USER_GID -s $USER_SH -m $USERNAME \
-  && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-  && chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Add VNC server & noVNC web app for debugging and control.
 COPY ./.devcontainer/scripts/desktop-lite-debian.sh /tmp/scripts/desktop-lite-debian.sh
@@ -37,7 +27,7 @@ ENV DBUS_SESSION_BUS_ADDRESS="autolaunch:" \
   VNC_PORT="5901" \
   NOVNC_PORT="6080" \
   DISPLAY=":1"
-RUN bash /tmp/scripts/desktop-lite-debian.sh $USERNAME password
+RUN bash /tmp/scripts/desktop-lite-debian.sh root password
 
 # Enable openCL support (OpenCV uses it for hardware acceleration).
 RUN mkdir -p /etc/OpenCL/vendors && \
@@ -79,8 +69,6 @@ ENTRYPOINT [ \
   # ROS entrypoint
   "/entrypoint.sh" \
   ]
-
-USER $USERNAME
 
 # Make /bin/sh launch bash instead.
 ENV ENV=\$HOME/.shrc
