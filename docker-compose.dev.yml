@@ -53,12 +53,16 @@ services:
           devices:
             - capabilities: [gpu]
 
-  # Extension of donor service defined in `docker-compose.yml`.
+  # Example of setup for ROS to be able to communicate across containers.
+  # Is unnecessary if using a single container.
   donor:
-    # (OPTION)(LINUX)(X11) Needed to use host's X Server for GUI apps.
-    # network_mode: host
     ports:
       # Expose noVNC web app.
       - 6080:6080
       # Expose rosbridge.
       - 9090:9090
+    image: alpine # smallest image
+    ipc: shareable
+    pid: shareable
+    stop_signal: SIGKILL
+    command: sleep infinity
