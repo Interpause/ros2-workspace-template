@@ -5,7 +5,9 @@
 . /opt/ros/$ROS_DISTRO/setup.sh
 
 # Mitigates the Dockerfile somehow breaking folder permissions.
-sudo chown user:user /code
+echo Workspace root is $WORKSPACE_ROOT
+sudo ln -s "$WORKSPACE_ROOT" /code
+sudo chown user:user "$WORKSPACE_ROOT"
 
 # Something deleted the package indexes so we re-download them for convenience.
 sudo apt-get update
