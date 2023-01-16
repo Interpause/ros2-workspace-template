@@ -10,17 +10,12 @@
 # this cannot be done in the Dockerfile (else VS Code doesn't configure `.gitconfig`).
 git config --global safe.directory "*"
 
-# If using named volume to store repository, clone and setup the repository.
-test -d "/code/.git" \
-  || ( \
-    git clone "(OPTION) Insert repository url" /code --recurse-submodules \
-    && cd /code \
-    && git submodule foreach --recursive git checkout main \
-  )
+# Ensure submodules are cloned; Doesn't affect already cloned ones.
+git submodule update --init --recursive
 
-# (OPTION) Symlink `/data` to `/code/data` for convenience if using `/data` mount point.
-# ln -sf /data /code/
+# (OPTION) Symlink `/data` mount point to workspace folder for convenience.
+# ln -sf /data "$WORKSPACE_ROOT/"
 
 # Ensure dependencies are installed.
-rosdep install -i --from-path /code -y
-pip install -r /code/requirements.txt
+rosdep install --ignore-src --from-path "$WORKSPACE_ROOT" -y
+pip install -r "$WORKSPACE_ROOT/requirements.txt"

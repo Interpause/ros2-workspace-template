@@ -7,12 +7,13 @@
   "name": "ROS2 Dev",
   "dockerComposeFile": "../docker-compose.dev.yml",
   "service": "dev",
-  "workspaceFolder": "/code",
+  "workspaceFolder": "/", // Default
   // See: https://containers.dev/implementors/json_reference/#lifecycle-scripts
   // Please follow the same method of creating shell scripts in the `hooks` folder.
   "postCreateCommand": ". /tmp/.devcontainer/hooks/postCreate.sh",
   "postStartCommand": ". /tmp/.devcontainer/hooks/postStart.sh",
   "remoteEnv": {
+    // Declare environment variables for shell scripts in the `hooks` folder.
     "WORKSPACE_ROOT": "${containerWorkspaceFolder}"
   },
   "customizations": {

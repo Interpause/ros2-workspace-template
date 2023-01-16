@@ -1,33 +1,28 @@
 version: '3.9'
 
-# (OPTION) Create named volume to store repository.
-# volumes:
-#   code:
+volumes:
+  # Store VS Code extensions in named volume to prevent re-downloading.
+  vscode-extensions:
 
 services:
   dev:
-    # NOTE: All paths are relative to the first file in the `dockerComposeFile`
-    # array found in `devcontainer.json`.
-
     build:
       context: .
       dockerfile: Dockerfile.dev
 
     volumes:
-      # Allow access to Docker daemon to allow VS Code Docker extension to work inside container.
+      # Store VS Code extensions in named volume to prevent re-downloading.
+      - vscode-extensions:/root/.vscode-server/extensions
+      # Allow access to Docker daemon for VS Code Docker extension to work inside container.
       - /var/run/docker.sock:/var/run/docker-host.sock
       # (OPTION) Mount point for `data` folder.
       # - ./data:/data:cached
-      # (OPTION)(LINUX)(X11) Mount host's `.Xauthority` to allow container to self-authenticate with X Server.
-      # - $HOME/.Xauthority:/home/root/.Xauthority:rw
-
-    # (OPTION)(LINUX)(X11) Use X Server address from host.
-    # environment:
-    #   DISPLAY: ${DISPLAY}
+      # (OPTION) Legacy support for mounting repository from host filesystem.
+      # - .:/code:cached
 
     # Better process handling by using a process management system (tini).
     init: true
-    # Larger shared memory for VNC & ROS2.
+    # Larger shared memory for VNC & ROS.
     shm_size: 1gb
 
     # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
@@ -36,11 +31,11 @@ services:
     security_opt:
       - seccomp:unconfined
 
-    # Used to allow ROS2's underlying DDS to communicate across containers.
+    # Used to allow ROS to communicate across containers.
     ipc: service:donor
     pid: service:donor
 
-    # Isolate ROS2 nodes into their own network.
+    # Isolate ROS nodes into their own network.
     network_mode: service:donor
 
     # Override default command so things don't shut down after the process ends.
