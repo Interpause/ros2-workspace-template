@@ -21,6 +21,8 @@
       "extensions": [
         // VS Code's Intellisense.
         "VisualStudioExptTeam.vscodeintellicode",
+        // Useful for inspecting & controlling Docker.
+        "ms-azuretools.vscode-docker",
         // Format markdown.
         "DavidAnson.vscode-markdownlint",
         // Format JSON & other config files.

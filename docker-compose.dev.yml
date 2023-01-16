@@ -13,10 +13,9 @@ services:
       context: .
       dockerfile: Dockerfile.dev
 
-    volumes: []
-      # (OPTION) Choose whether to use named volume to store repository.
-      # - .:/code:cached # Repository located on host is mounted into container.
-      # - code:/code # named volume used to store repository.
+    volumes:
+      # Allow access to Docker daemon to allow VS Code Docker extension to work inside container.
+      - /var/run/docker.sock:/var/run/docker-host.sock
       # (OPTION) Mount point for `data` folder.
       # - ./data:/data:cached
       # (OPTION)(LINUX)(X11) Mount host's `.Xauthority` to allow container to self-authenticate with X Server.
