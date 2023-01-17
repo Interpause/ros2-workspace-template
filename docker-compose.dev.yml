@@ -16,7 +16,7 @@ services:
       # Allow access to Docker daemon for VS Code Docker extension to work inside container.
       - /var/run/docker.sock:/var/run/docker-host.sock
       # (OPTION) Mount point for `data` folder.
-      # - ./data:/data:cached
+      # - C:\Users\user\Documents\project-name-data:/data:cached
       # (OPTION) Legacy support for mounting repository from host filesystem.
       # - .:/code:cached
 
@@ -56,8 +56,11 @@ services:
       - 6080:6080
       # Expose rosbridge.
       - 9090:9090
-    image: alpine # smallest image
+
+    # Used to allow ROS to communicate across containers.
     ipc: shareable
     pid: shareable
+
+    image: alpine # smallest image
     stop_signal: SIGKILL
     command: sleep infinity

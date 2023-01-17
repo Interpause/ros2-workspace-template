@@ -22,8 +22,8 @@ Template for ROS2 workspace using [VS Code Dev Containers](https://code.visualst
   - [Dev Container Lifecycle Hooks](#dev-container-lifecycle-hooks)
   - [Dev Container using Docker Compose](#dev-container-using-docker-compose)
 - [Tips](#tips)
-  - [`git` Submodules](#git-submodules)
   - [`example_module`](#example_module)
+  - [`git` Submodules](#git-submodules)
   - [Update Package Indexes](#update-package-indexes)
   - [Minimize Changes to the Dockerfile](#minimize-changes-to-the-dockerfile)
   - [Change ROS Distro](#change-ros-distro)
@@ -35,7 +35,12 @@ Template for ROS2 workspace using [VS Code Dev Containers](https://code.visualst
 
 ### Mount Point `/data`
 
-Mount points are used to mount a folder from the host into the container. By following `(OPTION)`s, `./data` on the host is mounted to `/data` in the container. `/data` can be used to share anything from the host with the container (e.g., config files, models, databases).
+> Note: If using `Dev Containers: Clone Repository in Container Volume...`, the host folder path must be absolute.
+
+Mount points are used to mount a folder from the host into the container. An example for mounting a folder to `/data` is included in [`docker-compose.dev.yml`](./docker-compose.dev.yml) as an `(OPTION)`. `/data` can be used to share anything from the host with the container (e.g., config files, models, databases). Also remember to:
+
+- Add mount points to [`.gitignore`](./.gitignore) and [`.dockerignore`](./.dockerignore).
+- Symlink mount points into your workspace folder for convenience in [`postCreate.sh`](./.devcontainer/hooks/postCreate.sh).
 
 While one mount point is sufficient, more can be added by following `/data`'s example. See <https://docs.docker.com/storage/bind-mounts/> for more info.
 
@@ -64,6 +69,8 @@ See <https://docs.docker.com/engine/reference/commandline/docker/> for more info
 
 #### Building
 
+> Note: If using `Dev Containers: Clone Repository in Container Volume...` on Windows, follow <https://code.visualstudio.com/docs/containers/choosing-dev-environment#_windows-subsystem-for-linux> to ensure built images are stored on the host computer's image repository.
+
 ```sh
 docker build . -t organization/repo:vx.x.x -t organization/repo:latest
 ```
@@ -71,6 +78,8 @@ docker build . -t organization/repo:vx.x.x -t organization/repo:latest
 Images can have multiple names tagged to them. Tagging images with the version number and as latest helps when distributing images.
 
 #### Exporting
+
+> Note: Run this command on the host computer rather than in the Dev Container.
 
 ```sh
 docker save organization/repo:vx.x.x organization/repo:latest -o repo-vx.x.x.tar
@@ -102,11 +111,19 @@ Both [`devcontainer.json`](./.devcontainer/devcontainer.json) and [`extensions.j
 
 Instead of using Dev Container with a Dockerfile, this template uses it with Docker Compose instead. This is done for a few reasons:
 
-- Include example of multiple Docker containers being capable of operating as one ROS system.
+- Include example of how to configure Docker for ROS to communicate across containers.
 - Docker Compose is closer to real world deployment scenarios.
   - It is also more flexible and easier to configure than [`devcontainer.json`](./.devcontainer/devcontainer.json).
 
 ## Tips
+
+### `example_module`
+
+`example_module`'s [README.md](https://github.com/Interpause/ros-example-node/blob/main/README.md) provides instructions on how to create a `git` submodule and add ROS packages to it. It also contains a simple pub-sub `launch` file that can be used to test bandwidth & latency. To remove `example_module`:
+
+```sh
+git rm example_module
+```
 
 ### `git` Submodules
 
@@ -139,14 +156,6 @@ git submodule foreach --recursive git checkout main
 ```
 
 This is done for you automatically if using a named volume to store the repository.
-
-### `example_module`
-
-`example_module`'s [README.md](https://github.com/Interpause/ros-example-node/blob/main/README.md) provides instructions on how to create a `git` submodule and add ROS packages to it. It also contains a simple pub-sub `launch` file that can be used to test bandwidth & latency. To remove `example_module`:
-
-```sh
-git rm example_module
-```
 
 ### Update Package Indexes
 

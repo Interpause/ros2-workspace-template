@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # Dockerfile for production
-# Referring to Dockerfile.dev might be useful for understanding the contents.
+# Referring to Dockerfile.dev & hooks/postCreate.sh might be useful for understanding the contents.
 
 FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu22.04
 

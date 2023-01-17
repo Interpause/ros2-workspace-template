@@ -33,7 +33,7 @@ RUN bash /tmp/scripts/desktop-lite-debian.sh root password
 RUN mkdir -p /etc/OpenCL/vendors && \
   echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 
-# Curl key and authorize ROS repository.
+# Curl key to authorize ROS repository.
 RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" > /etc/apt/sources.list.d/ros2.list
 
@@ -58,6 +58,15 @@ RUN rosdep init && rosdep update
 # RQT's plugin support allows for custom visualizations, tools or control panels.
 RUN apt-get install -y ~nros-${ROS_DISTRO}-rqt*
 
+# Curl key to authorize Docker repository.
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - 2>/dev/null \
+  && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+
+# Install Docker CLI tools (not including daemon).
+RUN apt-get update \
+  && apt-get install -y docker-ce-cli \
+  && pip install docker-compose
+
 # Needed for Dev Container lifecycle hooks to run.
 COPY ./.devcontainer /tmp/.devcontainer
 
@@ -65,16 +74,12 @@ COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT [ \
   # VNC entrypoint
-  "/usr/local/share/desktop-init.sh", \
-  # ROS entrypoint
-  "/entrypoint.sh" \
+  "/usr/local/share/desktop-init.sh" \
   ]
 
 # Make /bin/sh launch bash instead.
 ENV ENV=\$HOME/.shrc
 RUN echo "exec bash" >> ~/.shrc
-# Auto-activate ROS whenever bash shell is opened.
-RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource /code/install/local_setup.bash" >> ~/.bashrc
 
 # Ensure RQT icons show up.
 RUN mkdir ~/.icons && ln -s /usr/share/icons/Tango ~/.icons/hicolor

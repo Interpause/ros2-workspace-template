@@ -13,9 +13,6 @@ git config --global safe.directory "*"
 # Ensure submodules are cloned; Doesn't affect already cloned ones.
 git submodule update --init --recursive
 
-# (OPTION) Symlink `/data` mount point to workspace folder for convenience.
-# ln -sf /data "$WORKSPACE_ROOT/"
-
 # Ensure dependencies are installed.
 rosdep install --ignore-src --from-path "$WORKSPACE_ROOT" -y
 pip install -r "$WORKSPACE_ROOT/requirements.txt"
