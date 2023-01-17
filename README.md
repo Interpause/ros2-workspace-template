@@ -3,6 +3,7 @@
 Template for ROS2 workspace using [VS Code Dev Containers](https://code.visualstudio.com/docs/remote/containers) & [Docker Compose](https://docs.docker.com/compose/).
 
 - Use `Dev Containers: Clone Repository in Container Volume...` in VS Code's Command Palette to auto-magically setup everything!
+  - To re-open repository, either use `File > Open Recent` or repeat the above with the **exact SAME url**.
 - For customization, do a global find & replace for `(OPTION)`.
   - Remember to `Dev Containers: Rebuild Container` afterwards!
 - GUI apps are viewable via [noVNC](https://novnc.com/info.html) (VNC client web app) hosted on <http://localhost:6080/>.
