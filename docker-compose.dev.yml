@@ -2,6 +2,8 @@ version: '3.9'
 
 volumes:
   # Store VS Code extensions in named volume to prevent re-downloading.
+  # See: https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls
+  # Also see: https://github.com/microsoft/vscode-remote-release/issues/7690
   vscode-extensions:
 
 services:
@@ -12,9 +14,9 @@ services:
 
     volumes:
       # Store VS Code extensions in named volume to prevent re-downloading.
-      - vscode-extensions:/root/.vscode-server/extensions
+      - vscode-extensions:/root/.vscode-server
       # Allow access to Docker daemon for VS Code Docker extension to work inside container.
-      - /var/run/docker.sock:/var/run/docker-host.sock
+      - /var/run/docker.sock:/var/run/docker.sock
       # (OPTION) Mount point for `data` folder.
       # - C:\Users\user\Documents\project-name-data:/data:cached
       # (OPTION) Legacy support for mounting repository from host filesystem.
