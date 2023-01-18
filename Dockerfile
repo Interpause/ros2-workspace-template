@@ -54,6 +54,8 @@ RUN apt-get update && apt-get install -y \
   && pip install -r /code/requirements.txt \
   && colcon build --symlink-install \
   && rm -rf /var/lib/apt/lists/* \
+  && rm -rf /root/.ros/rosdep/* \
+  && rm -rf /root/.cache/pip \
   && rm -rf log/
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 10

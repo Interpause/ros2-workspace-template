@@ -171,7 +171,7 @@ rosdep update
 
 When a step in the Dockerfile is changed, subsequent steps are invalidated and need to be rebuilt. Furthermore, ROS workspaces with the same Dockerfile share cache, resulting in less disk usage and shorter rebuilds.
 
-The current Dockerfiles should work in most cases without needing edits. Nonetheless, if the Dockerfile becomes too complex, re-organizing it is fine.
+The current Dockerfiles should work in most cases without needing edits. Nonetheless, if the Dockerfile becomes too complex, re-organizing it is fine. See <https://docs.docker.com/develop/develop-images/dockerfile_best-practices/> for more info on Docker layer caching and other Docker tips.
 
 ### Change ROS Distro
 
