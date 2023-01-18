@@ -22,7 +22,7 @@ services:
       # Allow access to Docker daemon for VS Code Docker extension to work inside container.
       - /var/run/docker.sock:/var/run/docker.sock
       # (OPTION) Mount point for `data` folder.
-      # - C:\Users\user\Documents\project-name-data:/data:cached
+      # - $USERPROFILE\Documents\project-name-data:/data:cached # $USERPROFILE (Windows) & $HOME (Linux) are absolute paths too.
       # (OPTION) Legacy support for mounting repository from host filesystem.
       # - .:/code:cached
 

@@ -36,7 +36,7 @@ Template for ROS2 workspace using [VS Code Dev Containers](https://code.visualst
 
 ### Mount Point `/data`
 
-> Note: If using `Dev Containers: Clone Repository in Container Volume...`, the host folder path must be absolute.
+> Note: If using `Dev Containers: Clone Repository in Container Volume...`, the host folder path must be absolute. It is possible to use `$USERPROFILE` (Windows) or `$HOME` (Linux) for absolute paths. Otherwise, the host folder path would be relative to the Docker Compose file location.
 
 Mount points are used to mount a folder from the host into the container. An example for mounting a folder to `/data` is included in [`docker-compose.dev.yml`](./docker-compose.dev.yml) as an `(OPTION)`. `/data` can be used to share anything from the host with the container (e.g., config files, models, databases). Also remember to:
 
