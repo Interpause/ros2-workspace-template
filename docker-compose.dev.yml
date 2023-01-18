@@ -5,6 +5,8 @@ volumes:
   # See: https://code.visualstudio.com/remote/advancedcontainers/avoid-extension-reinstalls
   # Also see: https://github.com/microsoft/vscode-remote-release/issues/7690
   vscode-extensions:
+  # Store pip wheel cache in named volume to prevent re-downloads.
+  pip-whl-cache:
 
 services:
   dev:
@@ -15,6 +17,8 @@ services:
     volumes:
       # Store VS Code extensions in named volume to prevent re-downloads.
       - vscode-extensions:/root/.vscode-server
+      # Store pip wheel cache in named volume to prevent re-downloads.
+      - pip-whl-cache:/root/.cache/pip
       # Allow access to Docker daemon for VS Code Docker extension to work inside container.
       - /var/run/docker.sock:/var/run/docker.sock
       # (OPTION) Mount point for `data` folder.
