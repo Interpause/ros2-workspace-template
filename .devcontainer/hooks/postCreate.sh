@@ -2,14 +2,28 @@
 # `postCreate.sh` is called when the Dev Container is first created.
 # It can be used for setup steps outside the Dockerfile.
 
-. /opt/ros/$ROS_DISTRO/setup.sh
+# Allow apt index & cache to be kept.
+sudo rm -f /etc/apt/apt.conf.d/docker-clean; \
+  echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' | sudo tee /etc/apt/apt.conf.d/keep-cache
 
-# Auto-activate ROS whenever bash shell is opened.
-echo "source /opt/ros/$ROS_DISTRO/setup.bash\nsource $WORKSPACE_ROOT/install/local_setup.bash" >> ~/.bashrc
+# Fix perms issues.
+sudo chown -R vscode:vscode ~/.cache
 
-# (OPTION) Symlink `/data` mount point to workspace folder for convenience.
-# ln -sf /data "$WORKSPACE_ROOT/"
+# Auto-activate ROS whenever shell is opened.
+echo "source /opt/ros/$ROS_DISTRO/setup.zsh" >> ~/.zshrc
 
-# Something deleted the package indexes so we re-download them for convenience.
-apt-get update
+# Ensure submodules are cloned; Doesn't affect already cloned ones.
+git submodule update --init --recursive
+
+# Ensure dependencies are installed.
+sudo apt-get update
 rosdep update
+rosdep install --ignore-src --from-path . -y
+pip install -r requirements.txt
+
+# Fix RQT icons.
+mkdir ~/.icons && ln -s /usr/share/icons/Tango ~/.icons/hicolor
+
+# postCreate.sh
+sudo rm -f /etc/apt/apt.conf.d/docker-clean; \
+  echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' | sudo tee /etc/apt/apt.conf.d/keep-cache

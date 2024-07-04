@@ -1,48 +1,54 @@
-// Dev Container configuration.
-// For format details, see https://aka.ms/devcontainer.json.
-// For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/main/containers/docker-existing-docker-compose
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
-  // (OPTION) Change the name to help identify which workspace you are in.
-  "name": "ROS2 Dev",
-  "dockerComposeFile": "../docker-compose.dev.yml",
-  "service": "dev",
-  "workspaceFolder": "/", // Default
-  // See: https://containers.dev/implementors/json_reference/#lifecycle-scripts
-  // Please follow the same method of creating shell scripts in the `hooks` folder.
-  "postCreateCommand": ". /tmp/.devcontainer/hooks/postCreate.sh",
-  "postStartCommand": ". /tmp/.devcontainer/hooks/postStart.sh",
-  "remoteEnv": {
-    // Declare environment variables for shell scripts in the `hooks` folder.
-    "WORKSPACE_ROOT": "${containerWorkspaceFolder}"
-  },
-  "customizations": {
-    "vscode": {
-      // Extensions in container.
-      "extensions": [
-        // VS Code's Intellisense.
-        "VisualStudioExptTeam.vscodeintellicode",
-        // Useful for inspecting & controlling Docker.
-        "ms-azuretools.vscode-docker",
-        // Format markdown.
-        "DavidAnson.vscode-markdownlint",
-        // Format JSON & other config files.
-        "esbenp.prettier-vscode",
-        // ROS utilities.
-        "ms-iot.vscode-ros",
-        // ROS Message Definitions use CMake.
-        "twxs.cmake",
-        // Python support.
-        "ms-python.python",
-        // Intelligent Python features.
-        "ms-python.vscode-pylance",
-        // Python formatter.
-        "ms-python.black-formatter",
-        // Python import sorter.
-        "ms-python.isort",
-        // Auto-generate Python doc strings.
-        "njpwerner.autodocstring"
-      ]
-    }
-  }
+	"name": "ROS2 Dev",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	// "image": "osrf/ros:humble-desktop-full",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+		// "ghcr.io/Interpause/mydevfeatures/custom-bash:3: {},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+		"ghcr.io/devcontainers/features/git-lfs:1": {},
+		"ghcr.io/devcontainers/features/desktop-lite:1": {
+			"password": "noPassword",
+			"webPort": 6080
+		},
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"configureZshAsDefaultShell": true,
+			"upgradePackages": false,
+			"username": "vscode"
+		}
+	},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [6080],
+
+	// See: https://containers.dev/implementors/json_reference/#lifecycle-scripts
+	// Please follow the same method of creating shell scripts in the `hooks` folder.
+	"postCreateCommand": ".devcontainer/hooks/postCreate.sh",
+	"postStartCommand": ".devcontainer/hooks/postStart.sh",
+
+	// "privileged": true,
+	"runArgs": ["--shm-size=32G", "--gpus=all"],
+	// "shutdownAction": "none"
+
+	"mounts": [
+		{ "type": "volume", "source": "apt-cache", "target": "/var/cache/apt" },
+		{ "type": "volume", "source": "apt-list-cache", "target": "/var/lib/apt/lists" },
+		{ "type": "volume", "source": "pip-cache", "target": "/home/vscode/.cache/pip" },
+		// Access host devices within devcontainer.
+		{ "type": "bind", "source": "/dev", "target": "/dev" },
+		// Remove below on Linux as they don't exist.
+		{ "type": "bind", "source": "/usr/lib/wsl", "target": "/usr/lib/wsl"}
+	],
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	"remoteUser": "vscode"
 }
